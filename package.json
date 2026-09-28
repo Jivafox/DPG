@@ -1,0 +1,9 @@
+{
+  "name": "dpg",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "verify": "node scripts/verify.mjs",
+    "verify:structure": "node scripts/verify.mjs --structure-only"
+  }
+}
