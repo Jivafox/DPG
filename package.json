@@ -4,6 +4,13 @@
   "type": "module",
   "scripts": {
     "verify": "node scripts/verify.mjs",
-    "verify:structure": "node scripts/verify.mjs --structure-only"
+    "verify:structure": "node scripts/verify.mjs --structure-only",
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/serve.mjs",
+    "test": "node --test scripts/*.test.mjs",
+    "test:browser": "node scripts/browser-check.cjs"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

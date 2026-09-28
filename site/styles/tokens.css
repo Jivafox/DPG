@@ -1,0 +1,13 @@
+:root {
+  color-scheme: dark;
+  --bg-canvas: #0b0c0f;
+  --bg-surface: #111318;
+  --bg-elevated: #191b21;
+  --bg-hover: #202229;
+  --text-primary: #f0f1f3;
+  --text-secondary: #a0a3ad;
+  --text-muted: #777b86;
+  --border-subtle: #272a31;
+  --accent: #8b90ff;
+  --focus-ring: #aeb1ff;
+}

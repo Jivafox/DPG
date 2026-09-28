@@ -1,17 +1,17 @@
-name: validate-structure
+name: validate
 on:
   push:
   pull_request:
+permissions:
+  contents: read
 jobs:
   verify:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node scripts/verify.mjs --structure-only
+      - run: npm run verify:structure
+      - run: npm test
+      - run: npm run build -- --structure-only

@@ -12,7 +12,7 @@ const errors = [];
 const fail = (_location, reason) => errors.push(reason);
 let rules = [];
 const args = process.argv.slice(2);
-if (args.some(arg => !['--structure-only', '--history'].includes(arg)) ||
+if (args.some(arg => !['--structure-only', '--history', '--dist'].includes(arg)) ||
     (structureOnly && args.includes('--history'))) {
   console.error('✕ 检查参数无效');
   process.exit(1);
@@ -119,6 +119,11 @@ try {
   scan(root);
   checkTools();
   if (process.argv.includes('--history')) checkHistory();
+  if (process.argv.includes('--dist')) {
+    const output = path.join(root, 'dist');
+    if (!fs.existsSync(output) || fs.lstatSync(output).isSymbolicLink() || !fs.existsSync(path.join(output, 'index.html'))) fail('dist', '构建产物缺失或无效');
+    else scan(output);
+  }
 } catch {
   fail('check', '检查无法完成；请在本地私有环境排查，不公开原始异常');
 }

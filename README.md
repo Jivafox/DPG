@@ -2,36 +2,30 @@
 
 Design Playground — 公开的交互工具与视觉实验工作空间。
 
-本目录目前包含 V1 规范与检查骨架。`site/` 的实际页面尚待实现；本包不声称网站已经建成或已连接 GitHub。
+V1 主站与首个工具已在本地实现：深色单栏首页，直接展示全部工具；点击进入站内运行页，可返回首页或独立打开。首版不设分类、搜索或筛选。当前尚未推送本地开发提交，也未部署到 GitHub Pages。
 
-## 先读什么
+## 本地运行
 
-1. [仓库蓝图](docs/REPOSITORY_SPEC.md)：范围、目录、架构与确定的决策。
-2. [AGENTS.md](AGENTS.md)：协作者和编码 Agent 的执行顺序。
-3. [设计系统](docs/DESIGN_SYSTEM.md)、[工具标准](docs/TOOL_STANDARD.md)：做主站和导入工具时的约束。
-4. [接入指南](docs/INTEGRATION_GUIDE.md)、[内容政策](docs/CONTENT_POLICY.md)、[质量清单](docs/QA_CHECKLIST.md)：从导入到发布。
-5. [GitHub 工作流](docs/GITHUB_WORKFLOW.md)：阶段性版本管理与 Pages。
+使用 Node 22+，无需安装运行时依赖：
 
-## V1 决策
+```sh
+npm test
+npm run build
+npm run preview
+```
 
-- 主站以暗色单栏界面直接展示全部工具；首版不设分类、搜索和筛选；工具在站内独立 iframe 打开，并有独立打开入口。
-- 每个工具占一个 `tools/<slug>/` 文件夹；新文件放入不自动加入站点；公开仓库中的源码仍可见。
-- 静态站点，无后台上传与数据库；GitHub 是内容来源，Pages 是公开发布渠道。
-- 先清理来源信息，后设计统一、验证、登记、提交；未经检查的导入文件不得进入 Git 历史。
-- 主站可以统一布局与导航，工具的 HTML/CSS/JS/资源不跨工具共享或覆盖。
+构建需要仓库外私有词库；配置方式见 [内容政策](docs/CONTENT_POLICY.md)。默认预览端口 4174。检查仓库子路径可另运行 `npm run preview -- --port 4175 --base /DPG/`。完整技术组成、导航与测试说明见 [开发文档](docs/DEVELOPMENT.md)。
 
-- 功能分支开发、PR 审核、稳定版本标记与发布记录用于追溯和回退。每次推送前先报告风险检查结果，再取得用户明确确认；不自动推送或上线。
+## 工具
 
-## 接下来
+[ASCII Studio](tools/ascii-studio/index.html) 支持图片/视频转字符画、自定义 SVG 字符与图片、矢量及无声视频导出。已通过本地接入验证并纳入构建，`published` 是构建资格，不表示已经上线。素材在本机处理，字体使用本机字体。详情见 [工具验收](docs/qa/ASCII_STUDIO.md) 与 [主站验收](docs/qa/SITE_V1.md)。
 
-提供原始文件或位置即可，由协作者自主整理、清理和补齐元数据；责任与检查流程见 [启动材料与工具交付清单](docs/INTAKE_CHECKLIST.md)。
+## 规范与协作
 
-协作者可先运行 `node scripts/verify.mjs --structure-only` 做通用检查；提交及推送前必须按 [内容政策](docs/CONTENT_POLICY.md) 配置仓库外私有规则并完成严格检查，再依 [仓库蓝图](docs/REPOSITORY_SPEC.md) 开发 `site/` 与构建脚本。首次接通仓库与 Pages 时按 [GitHub 工作流](docs/GITHUB_WORKFLOW.md) 设置。此规范可以先单独评审；无需已有工具才能使用。
+- [仓库蓝图](docs/REPOSITORY_SPEC.md)、[AGENTS.md](AGENTS.md)：范围、架构与执行顺序。
+- [设计系统](docs/DESIGN_SYSTEM.md)、[工具标准](docs/TOOL_STANDARD.md)：视觉与工具格式。
+- [材料接收](docs/INTAKE_CHECKLIST.md)、[接入指南](docs/INTEGRATION_GUIDE.md)：用户提供原件，协作者自主整理；原始材料先在仓库外清理。
+- [内容政策](docs/CONTENT_POLICY.md)、[QA 清单](docs/QA_CHECKLIST.md)：私有规则、公开边界及检查要求。
+- [GitHub 工作流](docs/GITHUB_WORKFLOW.md)、[版本记录模板](docs/releases/TEMPLATE.md)：功能分支、推送确认、版本识别及回退。
 
-当前规范审核与未决事项见 [规范审核](docs/SPEC_REVIEW.md)。
-
-具体敏感词库不随项目分发，也不以编码形式藏在源码中。公开 CI 只验证通用结构；缺少私有词库时不能宣称完整内容检查通过。
-
-## 首个工具
-
-[ASCII Studio](tools/ascii-studio/index.html) 已完成本地接入，状态为 review，支持图片/视频转字符画及导出，暂未加入发布索引。使用本地 HTTP 服务预览；[接入与验收记录](docs/qa/ASCII_STUDIO.md) 列出了检查结果与限制。主站和部署尚未实现。
+具体词库不随项目分发，不以编码形式写入源码。公开 CI 只做通用结构检查和构建；每次 push 前仍需本地完整风险检查与用户正式确认。分支 push 和 main 合并不自动上线；仅经确认的版本标签进入 Pages 发布流程。远端设置与真实发布尚未完成。

@@ -32,7 +32,7 @@ DPG/
 - `tools.json` 是有序 slug 数组：`{"published":["example-tool"]}`；工具详细信息以各自 `tool.json` 为唯一来源。构建时读取并生成 `dist/catalog.json`；浏览器只读构建产物，不尝试静态枚举文件夹。
 - `draft`、`review`、`ready` 工具只存在源目录，不进入 `dist/`；`published` 必须在索引中且通过校验。下架时先从索引移除，核对外部链接与构建产物。
 - 浏览器打开 `<site-base>/tools/<slug>/index.html` 应独立可用。站内 iframe 提供标题、返回、独立打开按钮；如果工具需要相机、剪贴板或下载权限，逐项测试嵌入态。不要默认使用会阻断脚本或同源功能的 iframe sandbox 属性。
-- V1 主站使用原生 HTML/CSS/JS，Node 22 仅用于校验与静态构建；不引入前端框架或运行时服务。构建脚本约定为 `node scripts/build.mjs`，`package.json` 暴露 `npm run build`；无须 npm 依赖即可复现。实现主站的阶段必须补齐脚本和 Pages workflow。
+- V1 主站使用原生 HTML/CSS/JS，Node 22 仅用于校验、静态构建和本地预览；不引入前端框架或运行时服务。构建脚本为 `node scripts/build.mjs`，`package.json` 暴露 `npm run build`；无须 npm 依赖即可复现。Pages workflow 只从经确认的版本标签部署。
 - 列表页使用站点根 URL，详情使用 `?tool=<slug>`；用 History API 管理前进/后退，刷新详情也能恢复。无效 slug 显示站内错误并提供返回入口；避免需要服务端回退的深层路由。
 
 ## 主站信息架构
