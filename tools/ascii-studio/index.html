@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ASCII Studio · DPG</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="panel">
+        <div class="brand">
+          <div><p class="eyebrow">DPG / 01</p><h1>ASCII Studio</h1><p class="intro">将图片与视频转换为字符画。素材仅在本机处理。</p></div>
+        </div>
+
+        <section class="control-group">
+          <h2>基础字符</h2>
+          <label class="drop-zone" id="glyphDropZone">
+            <input id="glyphUpload" type="file" accept=".svg,image/svg+xml" multiple />
+            <span>上传 SVG 字符</span>
+            <small>按上传顺序从亮到暗映射，越暗越靠后</small>
+          </label>
+          <label class="field">
+            <span>默认字符</span>
+            <input id="textGlyphs" type="text" value="01" spellcheck="false" />
+          </label>
+          <label class="field">
+            <span>字符字体</span>
+            <select id="textFont">
+              <option value="monospace" selected>等宽字体</option>
+              <option value="Arial, Helvetica, sans-serif">Arial</option>
+              <option value="'Helvetica Neue', Helvetica, Arial, sans-serif">Helvetica Neue</option>
+              <option value="Georgia, serif">Georgia</option>
+              <option value="'Times New Roman', Times, serif">Times New Roman</option>
+              <option value="'Courier New', Courier, monospace">Courier New</option>
+              <option value="'Trebuchet MS', Arial, sans-serif">Trebuchet MS</option>
+              <option value="Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif">Impact</option>
+              <option value="Lora, serif">Lora （本机字体）</option>
+              <option value="Geist Mono, monospace">Geist Mono （本机字体）</option>
+              <option value="Geist Pixel, monospace">Geist Pixel （本机字体）</option>
+            </select>
+          </label>
+          <div id="glyphList" class="glyph-list" aria-live="polite"></div>
+        </section>
+
+        <section class="control-group">
+          <h2>素材</h2>
+          <label class="drop-zone" id="mediaDropZone">
+            <input id="mediaUpload" type="file" accept="image/*,video/*" />
+            <span>上传图片或视频</span>
+            <small>图片可导出 PNG / SVG，视频可预览并导出</small>
+          </label>
+          <div class="media-actions">
+            <button id="playToggle" class="icon-button" type="button" disabled title="播放或暂停" aria-label="播放或暂停">▶</button>
+            <button id="resetMedia" class="icon-button" type="button" disabled title="清除素材" aria-label="清除素材">×</button>
+            <span id="mediaMeta" class="meta-text">等待素材</span>
+          </div>
+        </section>
+
+        <section class="control-group">
+          <h2>颜色和尺寸</h2>
+          <div class="color-grid">
+            <label class="field">
+              <span>字符颜色</span>
+              <div class="color-control">
+                <input id="fgColor" type="color" value="#ffffff" />
+                <input id="fgColorHex" type="text" value="#FFFFFF" spellcheck="false" aria-label="字符颜色 HEX" />
+              </div>
+            </label>
+            <label class="field">
+              <span>背景颜色</span>
+              <div class="color-control">
+                <input id="bgColor" type="color" value="#000000" />
+                <input id="bgColorHex" type="text" value="#000000" spellcheck="false" aria-label="背景颜色 HEX" />
+              </div>
+            </label>
+            <label class="toggle-field">
+              <input id="useGradient" type="checkbox" />
+              <span>渐变背景</span>
+            </label>
+            <label class="field" id="bgGradientEndField">
+              <span>背景底部</span>
+              <div class="color-control">
+                <input id="bgColorEnd" type="color" value="#000000" />
+                <input id="bgColorEndHex" type="text" value="#000000" spellcheck="false" aria-label="背景底部 HEX" />
+              </div>
+            </label>
+          </div>
+          <div class="slider-row canvas-scale-row">
+            <label>
+              <span>画布比例</span>
+              <input id="canvasScale" type="range" min="0.5" max="2" value="1" step="0.1" />
+            </label>
+            <output id="canvasScaleValue">1x</output>
+          </div>
+        </section>
+
+        <section class="control-group">
+          <h2>参数</h2>
+          <div id="sliders" class="sliders"></div>
+        </section>
+
+        <section class="control-group">
+          <h2>导出</h2>
+          <div class="export-grid">
+            <button data-export-png="1" type="button">PNG 1x</button>
+            <button data-export-png="2" type="button">PNG 2x</button>
+            <button data-export-png="4" type="button">PNG 4x</button>
+            <button id="exportSvg" type="button">SVG</button>
+            <button id="exportVideo" class="wide" type="button" disabled>导出视频</button>
+            <button id="resetAll" class="wide secondary" type="button">重置</button>
+          </div>
+          <progress id="exportProgress" class="export-progress" value="0" max="100" hidden></progress>
+          <p id="exportStatus" class="status-text" role="status">图片导出会使用当前预览帧。</p>
+        </section>
+      </aside>
+
+      <section class="stage">
+        <div class="stage-toolbar">
+          <span id="stageTitle">预览</span>
+          <span id="canvasMeta">-</span>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="outputCanvas" aria-label="字符画预览"></canvas><p id="emptyHint" class="empty-hint">上传图片或视频，开始创作字符画</p>
+        </div>
+      </section>
+    </main>
+
+    <canvas id="sourceCanvas" hidden></canvas>
+    <video id="sourceVideo" hidden playsinline muted crossorigin="anonymous"></video>
+    <img id="sourceImage" hidden alt="" />
+
+    <script src="./app.js"></script>
+  </body>
+</html>

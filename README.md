@@ -31,3 +31,7 @@ Design Playground — 公开的交互工具与视觉实验工作空间。
 当前规范审核与未决事项见 [规范审核](docs/SPEC_REVIEW.md)。
 
 具体敏感词库不随项目分发，也不以编码形式藏在源码中。公开 CI 只验证通用结构；缺少私有词库时不能宣称完整内容检查通过。
+
+## 首个工具
+
+[ASCII Studio](tools/ascii-studio/index.html) 已完成本地接入，状态为 review，支持图片/视频转字符画及导出，暂未加入发布索引。使用本地 HTTP 服务预览；[接入与验收记录](docs/qa/ASCII_STUDIO.md) 列出了检查结果与限制。主站和部署尚未实现。
