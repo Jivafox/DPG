@@ -16,8 +16,8 @@
 | 次文字 | `--text-secondary` | `#a0a3ad` |
 | 弱文字 | `--text-muted` | `#777b86` |
 | 细线 | `--border-subtle` | `#272a31` |
-| 强调 | `--accent` | `#8b90ff` |
-| 聚焦 | `--focus-ring` | `#aeb1ff` |
+| 强调 | `--accent` | `#1783FF` |
+| 聚焦 | `--focus-ring` | `#1783FF` |
 
 字族优先系统 sans（`Inter, ui-sans-serif, system-ui, sans-serif`）；正文 14px/1.5，辅助 12–13px，区块标题 18–24px，页面标题 28–36px。间距以 4px 为基础，常用 8/12/16/24/32；圆角控件 6px、面板 8px。边框一般 1px；不要靠大面积阴影制造层级。
 

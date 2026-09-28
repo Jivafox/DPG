@@ -18,6 +18,8 @@ npm run preview
 
 ## 工具
 
+更换首页工具封面：覆盖该工具的 `assets/cover.png` 后重新构建即可，详见 [封面替换说明](docs/COVERS.md)。
+
 [ASCII Studio](tools/ascii-studio/index.html) 支持图片/视频转字符画、自定义 SVG 字符与图片、矢量及无声视频导出。已通过本地接入验证并纳入构建，`published` 是构建资格，不表示已经上线。素材在本机处理，字体使用本机字体。详情见 [工具验收](docs/qa/ASCII_STUDIO.md) 与 [主站验收](docs/qa/SITE_V1.md)。
 
 ## 规范与协作

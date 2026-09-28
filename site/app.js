@@ -37,8 +37,15 @@ function renderList() {
     const card = document.createElement('a');
     card.className = 'tool-card'; card.href = detailURL(tool.id); card.dataset.tool = tool.id;
     const art = document.createElement('span'); art.className = 'tool-art'; art.setAttribute('aria-hidden', 'true');
-    const glyphArt = '     .:::.     \n   .:+***+:.   \n  .+*#####*+.  \n :*###@@###*: \n  .+*#####*+.  \n   .:+***+:.   \n     .:::.     ';
-    art.append(textElement('pre', '', tool.id === 'ascii-studio' ? glyphArt : `[ ${String(index + 1).padStart(2, '0')} ]`));
+    const fallback = () => art.replaceChildren(textElement('pre', '', `[ ${String(index + 1).padStart(2, '0')} ]`));
+    fallback();
+    if (tool.cover) {
+      const image = document.createElement('img');
+      image.alt = ''; image.decoding = 'async';
+      image.addEventListener('error', fallback, { once: true });
+      image.src = new URL(`tools/${tool.id}/${tool.cover}`, base).href;
+      art.replaceChildren(image);
+    }
     const info = document.createElement('div');
     info.append(textElement('h3', '', tool.name), textElement('p', '', tool.description), tagList(tool.tags));
     const action = textElement('span', 'card-action', '打开工具'); action.append(textElement('span', 'arrow', '→'));
@@ -121,6 +128,7 @@ async function loadCatalog() {
       if (typeof tool.id !== 'string' || !slugPattern.test(tool.id) || ids.has(tool.id) || tool.entry !== 'index.html' ||
           !['name', 'description', 'version'].every(key => typeof tool[key] === 'string') ||
           !Array.isArray(tool.tags) || !tool.tags.every(tag => typeof tag === 'string')) throw new Error('catalog invalid');
+      if (tool.cover !== undefined && (typeof tool.cover !== 'string' || !/^(?:[a-z0-9_-]+\/)*[a-z0-9_.-]+\.(png|jpe?g|webp|svg|avif)$/i.test(tool.cover) || tool.cover.includes('..'))) throw new Error('cover invalid');
       ids.add(tool.id);
     }
     catalog = data.tools; catalogReady = true; renderList();

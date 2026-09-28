@@ -22,6 +22,8 @@
 
 必填字段如示例，`id` 必须等于目录名；状态仅 `draft | review | ready | published`；日期为 ISO 格式；版本为 `MAJOR.MINOR.PATCH`。`description` 一句话说明用途，不写来源项目或内部信息。可选 `cover` 必须是工具目录内相对路径；可选 `capabilities` 枚举如 `camera`、`clipboard`、`download`，供站内提示。
 
+新增工具默认提供 `assets/cover.png`，并设置 `"cover": "assets/cover.png"`。用户更新封面只需替换同路径图片并重新构建。推荐 640 × 480px，支持 PNG/JPG/WebP/SVG/AVIF；已填写的 cover 必须指向真实图片文件，不能是外部 URL。具体说明见 [封面替换](COVERS.md)。
+
 V1 不要求 `category`，也不读取它生成分类；已有工具可保留该字段，后续分类方案另行确认。`tags` 必须为字符串数组，允许为空。工具 HTML 的 `<title>` 和可见标题与 `name` 对应；文件名与路径不使用空格、中文或临时版本号。
 
 根 `tools.json` 只登记已发布工具的 slug 且顺序即展示顺序。新增目录默认 `draft`，无需登记；进入 `ready` 仍不进入站点产物。只有 QA 通过后才能改 `published` 并登记。校验器应阻断索引不存在、重复、状态不一致、入口缺失和越界路径。

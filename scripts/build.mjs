@@ -13,6 +13,7 @@ const allowed = new Set(['.html', '.css', '.js', '.mjs', '.json', '.svg', '.png'
 function copyRuntime(source, target, { tool = false } = {}) {
   fs.mkdirSync(target, { recursive: true });
   for (const item of fs.readdirSync(source, { withFileTypes: true })) {
+    if (item.name === '.DS_Store') continue;
     if (item.isSymbolicLink()) throw new Error('Symbolic links are not allowed in build inputs');
     if (tool && item.name === 'tool.json') continue;
     if (item.name.startsWith('.') || ['node_modules', 'docs', 'dist', 'scripts'].includes(item.name)) throw new Error('Non-runtime file in build inputs');
@@ -35,6 +36,7 @@ try {
     copyRuntime(source, path.join(stage, 'tools', slug), { tool: true });
     const item = {};
     for (const key of ['id', 'name', 'description', 'tags', 'entry', 'version', 'created', 'updated']) item[key] = meta[key];
+    if (meta.cover) item.cover = meta.cover;
     catalog.push(item);
   }
   fs.writeFileSync(path.join(stage, 'catalog.json'), `${JSON.stringify({ tools: catalog }, null, 2)}\n`);

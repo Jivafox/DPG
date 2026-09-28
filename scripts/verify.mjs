@@ -46,6 +46,7 @@ function hasRule(bytes) {
 
 function scan(dir) {
   for (const item of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (item.name === '.DS_Store') continue;
     if (dir === root && ignored.has(item.name)) continue;
     const absolute = path.join(dir, item.name);
     const relative = path.relative(root, absolute);
@@ -77,6 +78,7 @@ function checkTools() {
     return;
   }
   for (const dirent of fs.readdirSync(toolsDir, { withFileTypes: true })) {
+    if (dirent.name === '.DS_Store') continue;
     const slug = dirent.name;
     if (!dirent.isDirectory() || !slugPattern.test(slug)) { fail(`tools/${slug}`, '目录名无效'); continue; }
     const meta = readJson(`tools/${slug}/tool.json`);
@@ -92,7 +94,7 @@ function checkTools() {
     if (!/^\d+\.\d+\.\d+$/.test(meta.version ?? '')) fail(`tools/${slug}/tool.json`, 'version 无效');
     for (const key of ['created', 'updated']) if (!/^\d{4}-\d{2}-\d{2}$/.test(meta[key] ?? '') || Number.isNaN(Date.parse(meta[key]))) fail(`tools/${slug}/tool.json`, `${key} 无效`);
     if (meta.status === 'published' !== slugs.includes(slug)) fail(`tools/${slug}/tool.json`, '发布状态与索引不一致');
-    if (meta.cover && (typeof meta.cover !== 'string' || meta.cover.startsWith('/') || meta.cover.includes('..') || !fs.existsSync(path.join(toolsDir, slug, meta.cover)))) fail(`tools/${slug}/tool.json`, 'cover 路径无效');
+    if (meta.cover !== undefined && (typeof meta.cover !== 'string' || !/^(?:[a-z0-9_-]+\/)*[a-z0-9_.-]+\.(png|jpe?g|webp|svg|avif)$/i.test(meta.cover) || meta.cover.includes('..') || !fs.existsSync(path.join(toolsDir, slug, meta.cover)) || !fs.statSync(path.join(toolsDir, slug, meta.cover)).isFile())) fail(`tools/${slug}/tool.json`, 'cover 必须为工具目录内存在的图片文件');
   }
   for (const slug of slugs) if (typeof slug !== 'string' || !slugPattern.test(slug) || !fs.existsSync(path.join(toolsDir, slug, 'tool.json'))) fail('tools.json', '索引包含不存在的工具');
 }

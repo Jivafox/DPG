@@ -29,6 +29,8 @@
 
 ## 运行与上线限制
 
+主题与封面更新：主站和 ASCII Studio 控件强调色统一为 `#1783FF`；ASCII Studio 卡片读取 `assets/cover.png`。实际浏览器验证了根路径与 `/DPG/` 子路径图片加载、640 × 480 封面尺寸、390/1280px 布局、工具内蓝色控件及封面请求失败时的编号回退。构建与 8 项 Node 测试通过，源码、历史和产物私有检查通过。Finder 的 `.DS_Store` 仅作为系统元数据忽略，不进入构建产物。
+
 本地构建、Node 测试、私有词库检查、可达历史检查和 `git diff --check` 已通过。远端只读历史已接入当前本地分支，但本地提交尚未推送。GitHub Pages workflow 只响应经过审核 main 历史中的附注 `vMAJOR.MINOR.PATCH` 标签；main 合并或普通分支 push 不部署。
 
 真实 GitHub Actions、Pages 设置、域名、部署 URL 和线上子路径尚未验证。首次 push、PR、合并、版本标签和上线仍分别需要风险检查与用户明确确认。
