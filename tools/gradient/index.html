@@ -6,16 +6,8 @@
 <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-<main>
-<div class="workbench">
-  <section class="stage-panel" aria-label="渐变预览">
-    <div class="stage">
-      <div class="canvas-wrap" id="canvasWrap">
-        <canvas id="preview"></canvas>
-      </div>
-    </div>
-  </section>
-  <aside aria-label="生成参数">
+<main class="app-shell">
+  <aside class="panel" aria-label="生成参数">
     <div class="brand">
       <p class="eyebrow">DPG / 04</p>
       <h1>Gradient</h1>
@@ -117,7 +109,14 @@
       <div class="hint">“随机生成图案”会重新排布图案位置与虚实层次，配色保持不变。</div>
     </div>
   </aside>
-</div>
+  <section class="stage" aria-label="渐变预览">
+    <div class="stage-toolbar"><span>预览</span><span id="canvasMeta">1200 × 1600</span></div>
+    <div class="canvas-area">
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="preview"></canvas>
+      </div>
+    </div>
+  </section>
 </main>
 
 <script>
@@ -285,6 +284,7 @@
 
   function render() {
     const W = state.renderW, H = state.renderH;
+    $("canvasMeta").textContent = W + " × " + H;
     off.width = W; off.height = H;
     const rng = mulberry32(state.seedLayout);
 
@@ -423,9 +423,9 @@
   // ---------- 预览适配 ----------
   function drawPreview() {
     const wrap = $("canvasWrap");
-    const stage = document.querySelector(".stage");
-    const maxW = stage.clientWidth - 32;
-    const maxH = stage.clientHeight - 32;
+    const stage = document.querySelector(".canvas-area");
+    const maxW = stage.clientWidth - 44;
+    const maxH = stage.clientHeight - 44;
     const scale = Math.min(maxW / state.renderW, maxH / state.renderH, 1);
     const vw = Math.max(1, Math.round(state.renderW * scale));
     const vh = Math.max(1, Math.round(state.renderH * scale));
