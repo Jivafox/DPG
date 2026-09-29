@@ -1430,7 +1430,7 @@ function rebuildStrip() {
   strip.style.background = stripGradient();
   state.colors.forEach((c, i) => {
     const stop = el("div", "strip-stop" + (i === state.selectedColor ? " sel" : ""));
-    stop.style.left = "calc(" + (8 + c.pos * 100) + "% - " + (c.pos * 16).toFixed(1) + "px)";
+    stop.style.left = "calc(" + (c.pos * 100) + "% + " + (8 - c.pos * 16).toFixed(1) + "px)";
     stop.style.background = c.hex;
     stop.setAttribute("aria-label", "色标 " + (i + 1));
     stop.addEventListener("pointerdown", (e) => {

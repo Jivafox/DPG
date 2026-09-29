@@ -1,15 +1,15 @@
 :root {
   color-scheme: dark;
 
-  /* shadcn/ui 语义 token（neutral 深色主题），DPG 蓝作为 primary/ring */
+  /* shadcn/ui 语义 token（neutral 深色主题），高亮色为白色 */
   --background: oklch(0.145 0 0);            /* 页面画布 ≈ #09090b */
   --foreground: oklch(0.985 0 0);            /* 主文字 ≈ #fafafa */
   --card: oklch(0.205 0 0);                  /* 卡片表面 ≈ #18181b */
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);               /* 浮层表面 */
   --popover-foreground: oklch(0.985 0 0);
-  --primary: #1783FF;                        /* 品牌主色（DPG 蓝） */
-  --primary-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);               /* 品牌主色（高亮白） */
+  --primary-foreground: oklch(0.205 0 0);
   --secondary: oklch(0.269 0 0);             /* 次级填充 ≈ #27272a */
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);                 /* 弱表面 */
@@ -19,7 +19,7 @@
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);              /* 默认细边 */
   --input: oklch(1 0 0 / 15%);               /* 输入框边 */
-  --ring: #1783FF;                           /* 聚焦环 */
+  --ring: #fff;                              /* 聚焦环 */
 
   /* 圆角比例尺（以 --radius 为基准） */
   --radius: 10px;

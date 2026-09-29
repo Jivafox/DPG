@@ -1,4 +1,4 @@
-:root{color-scheme:dark;--bg:oklch(0.145 0 0);--panel:oklch(0.205 0 0);--elevated:oklch(0.269 0 0);--line:oklch(1 0 0 / 10%);--text:oklch(0.985 0 0);--muted:oklch(0.708 0 0);--faint:oklch(0.556 0 0);--accent:#1783FF}
+:root{color-scheme:dark;--bg:oklch(0.145 0 0);--panel:oklch(0.205 0 0);--elevated:oklch(0.269 0 0);--line:oklch(1 0 0 / 10%);--text:oklch(0.985 0 0);--muted:oklch(0.708 0 0);--faint:oklch(0.556 0 0);--accent:#fff;--on-accent:oklch(0.205 0 0)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif}
 button,input,select{font:inherit}
@@ -30,7 +30,7 @@ canvas#cv{display:block;max-width:100%;max-height:calc(100vh - 96px);border-radi
 /* 按钮 */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:36px;padding:0 12px;border-radius:8px;font-size:13px;font-weight:500;border:1px solid var(--line);background:var(--elevated);color:var(--text);transition:filter .15s ease-out}
 .btn:hover:not(:disabled){filter:brightness(1.12)}
-.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .big-actions{display:flex;flex-direction:column;gap:8px}
 .hint{font-size:12px;color:var(--faint);line-height:1.6;margin-top:8px}
 
@@ -42,7 +42,7 @@ canvas#cv{display:block;max-width:100%;max-height:calc(100vh - 96px);border-radi
 .mode-tabs{display:flex;flex-wrap:wrap;gap:8px}
 .mode-tabs button{min-height:36px;padding:0 12px;border-radius:8px;font-size:12px;border:1px solid var(--line);background:var(--elevated);color:var(--muted);transition:filter .15s ease-out}
 .mode-tabs button:hover:not(.active){filter:brightness(1.12);color:var(--text)}
-.mode-tabs button.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.mode-tabs button.active{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 
 /* 分组与滑杆（JS 动态生成） */
 .group{padding:18px 0;border-top:1px solid var(--line)}
@@ -61,11 +61,11 @@ input[type=range]{width:100%;display:block;accent-color:var(--accent);cursor:poi
 .slider-sw{position:absolute;inset:0;background:var(--line);border-radius:10px;transition:background .15s ease-out}
 .slider-sw:before{content:"";position:absolute;width:14px;height:14px;border-radius:50%;left:3px;top:3px;background:var(--muted);transition:transform .15s ease-out,background .15s ease-out}
 .switch input:checked + .slider-sw{background:var(--accent)}
-.switch input:checked + .slider-sw:before{transform:translateX(16px);background:#fff}
+.switch input:checked + .slider-sw:before{transform:translateX(16px);background:var(--on-accent)}
 .switch input:focus-visible + .slider-sw{outline:2px solid var(--accent);outline-offset:2px}
 
 /* 输入与下拉 */
-select,input[type=number]{width:100%;height:38px;background:var(--elevated);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:0 10px;font-size:13px}
+select,input[type=number]{width:100%;height:38px;background:var(--elevated);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:0 28px 0 10px;font-size:13px}
 .row{margin-bottom:4px}
 .row label{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-bottom:6px}
 .scale-row{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:10px}

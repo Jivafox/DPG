@@ -2,7 +2,7 @@
 
 ## 视觉原则
 
-深色、安静、内容优先。结构依靠对齐、间距、少量细线；导航低于内容层级。V2 起主站组件语言对齐 shadcn/ui 的语义 token 体系与组件规范（neutral 深色主题），保持 DPG 自有品牌蓝与标识，不引入 React/Tailwind，仍以原生 HTML/CSS/JS 实现。
+深色、安静、内容优先。结构依靠对齐、间距、少量细线；导航低于内容层级。V2 起主站组件语言对齐 shadcn/ui 的语义 token 体系与组件规范（neutral 深色主题），高亮色为白色（主行动按钮白底深字），不引入 React/Tailwind，仍以原生 HTML/CSS/JS 实现。
 
 ## 基础 token（落地为 `site/styles/tokens.css`，工具可拷贝值而非跨目录 import）
 
@@ -14,14 +14,14 @@
 | 主文字 | `--foreground` | `oklch(0.985 0 0)` ≈ `#fafafa` |
 | 卡片表面 | `--card` / `--card-foreground` | `oklch(0.205 0 0)` ≈ `#18181b` |
 | 浮层 | `--popover` / `--popover-foreground` | 同 card |
-| 主行动/品牌 | `--primary` / `--primary-foreground` | `#1783FF` / 近白 |
+| 主行动/高亮 | `--primary` / `--primary-foreground` | `oklch(0.922 0 0)` / `oklch(0.205 0 0)` |
 | 次级填充 | `--secondary` / `--secondary-foreground` | `oklch(0.269 0 0)` ≈ `#27272a` |
 | 弱表面/次文字 | `--muted` / `--muted-foreground` | 同 secondary / `oklch(0.708 0 0)` ≈ `#a1a1aa` |
 | 悬停表面 | `--hover` / `--hover-foreground` | 同 secondary |
 | 错误 | `--destructive` | `oklch(0.704 0.191 22.216)` |
 | 细边 | `--border` | `oklch(1 0 0 / 10%)` |
 | 输入框边 | `--input` | `oklch(1 0 0 / 15%)` |
-| 聚焦环 | `--ring` | `#1783FF` |
+| 聚焦环 | `--ring` | `#fff` |
 
 圆角比例尺：基准 `--radius: 10px`，派生 `--radius-sm` 6px、`--radius-md` 8px、`--radius-lg` 10px、`--radius-xl` 14px。
 

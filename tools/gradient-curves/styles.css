@@ -1,4 +1,4 @@
-:root{color-scheme:dark;--bg:oklch(0.145 0 0);--panel:oklch(0.205 0 0);--elevated:oklch(0.269 0 0);--line:oklch(1 0 0 / 10%);--text:oklch(0.985 0 0);--muted:oklch(0.708 0 0);--faint:oklch(0.556 0 0);--accent:#1783FF}
+:root{color-scheme:dark;--bg:oklch(0.145 0 0);--panel:oklch(0.205 0 0);--elevated:oklch(0.269 0 0);--line:oklch(1 0 0 / 10%);--text:oklch(0.985 0 0);--muted:oklch(0.708 0 0);--faint:oklch(0.556 0 0);--accent:#fff;--on-accent:oklch(0.205 0 0)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif}
 button,input,select{font:inherit}
@@ -36,7 +36,7 @@ canvas#preview{display:block;border-radius:6px}
 .row label .val{color:var(--text);font-variant-numeric:tabular-nums;font-size:12px}
 input[type=range]{width:100%;display:block;accent-color:var(--accent);cursor:pointer;margin:8px 0 4px}
 
-select{width:100%;height:36px;background:var(--elevated);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:0 10px;font-size:13px;cursor:pointer}
+select{width:100%;height:36px;background:var(--elevated);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:0 28px 0 10px;font-size:13px;cursor:pointer}
 
 .two-col{display:flex;gap:8px}
 .two-col>div{flex:1;min-width:0}
@@ -45,9 +45,9 @@ select{width:100%;height:36px;background:var(--elevated);color:var(--text);borde
 /* 按钮 */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:36px;padding:0 12px;border-radius:8px;font-size:13px;font-weight:500;border:1px solid var(--line);background:var(--elevated);color:var(--text);transition:filter .15s ease-out}
 .btn:hover:not(:disabled){filter:brightness(1.12)}
-.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .btn-small{width:auto;min-width:64px;min-height:28px;font-size:12px;padding:0 12px}
-.btn-small.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-small.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .btn-row{display:flex;gap:8px;margin-bottom:14px}
 .btn-row .btn{flex:1}
 
@@ -64,14 +64,14 @@ select{width:100%;height:36px;background:var(--elevated);color:var(--text);borde
 .seg button{flex:1;height:36px;background:var(--elevated);color:var(--muted);border:0;font-size:12px}
 .seg button+button{border-left:1px solid var(--line)}
 .seg button:hover:not(.active){color:var(--text)}
-.seg button.active{background:var(--accent);color:#fff}
+.seg button.active{background:var(--accent);color:var(--on-accent)}
 
 /* 开关 */
 .switch-row{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:12px}
 .switch{position:relative;flex:none;width:36px;height:20px;border-radius:999px;border:1px solid var(--line);background:var(--elevated);padding:0;transition:background .15s ease-out,border-color .15s ease-out}
 .switch .knob{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--muted);transition:left .15s ease-out,background .15s ease-out}
 .switch[aria-checked=true]{background:var(--accent);border-color:var(--accent)}
-.switch[aria-checked=true] .knob{left:18px;background:#fff}
+.switch[aria-checked=true] .knob{left:18px;background:var(--on-accent)}
 
 /* 滑杆行（JS 生成） */
 .slider-row{margin-bottom:14px}

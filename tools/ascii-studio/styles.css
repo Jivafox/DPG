@@ -6,8 +6,8 @@
   --line: oklch(1 0 0 / 10%);
   --text: oklch(0.985 0 0);
   --muted: oklch(0.708 0 0);
-  --accent: #1783FF;
-  --focus: #1783FF;
+  --accent: #fff;
+  --focus: #fff;
 }
 
 * {
@@ -132,7 +132,7 @@ h2 {
 
 .drop-zone.is-dragging {
   border-color: var(--focus);
-  background: #16222a;
+  background: oklch(1 0 0 / 8%);
   color: #ffffff;
 }
 
@@ -173,7 +173,7 @@ h2 {
   border-radius: 7px;
   background: oklch(0.145 0 0);
   color: var(--text);
-  padding: 0 10px;
+  padding: 0 28px 0 10px;
 }
 
 .field input[type="color"] {

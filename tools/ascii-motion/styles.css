@@ -7,8 +7,8 @@
   --line-strong: oklch(1 0 0 / 15%);
   --text: oklch(0.985 0 0);
   --muted: oklch(0.708 0 0);
-  --accent: #1783FF;
-  --focus: #1783FF;
+  --accent: #fff;
+  --focus: #fff;
   --danger: #ff8e8e;
 }
 
@@ -172,7 +172,7 @@ h2 {
 
 .drop-zone.is-dragging {
   border-color: var(--focus);
-  background: #16222a;
+  background: oklch(1 0 0 / 8%);
   color: #fff;
 }
 
@@ -208,7 +208,7 @@ h2 {
 .field input[type="number"],
 .field select {
   width: 100%;
-  padding: 0 10px;
+  padding: 0 28px 0 10px;
 }
 
 .field input[type="color"] {
@@ -611,8 +611,8 @@ button,select,input[type=text],input[type=number] {min-height:36px;background:va
 button {border-radius:8px}
 select,input[type=text],input[type=number] {border-radius:6px}
 button:hover:not(:disabled) {background:oklch(0.32 0 0)}
-[data-export-png="1"],#exportVideo {background:var(--accent);border-color:var(--accent);color:#fff}
-[data-export-png="1"]:hover:not(:disabled),#exportVideo:hover:not(:disabled) {background:#0972eb}
+[data-export-png="1"],#exportVideo {background:var(--accent);border-color:var(--accent);color:oklch(0.205 0 0)}
+[data-export-png="1"]:hover:not(:disabled),#exportVideo:hover:not(:disabled) {background:oklch(0.87 0 0)}
 .drop-zone:focus-within {outline:2px solid var(--focus);outline-offset:2px}
 .drop-zone input {pointer-events:auto}
 .three-colors {grid-template-columns:1fr}
