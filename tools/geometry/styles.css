@@ -1,4 +1,4 @@
-:root{color-scheme:dark;--bg:#0b0c0f;--panel:#111318;--elevated:#191b21;--line:#272a31;--text:#f0f1f3;--muted:#a0a3ad;--faint:#777b86;--accent:#1783FF}
+:root{color-scheme:dark;--bg:oklch(0.145 0 0);--panel:oklch(0.205 0 0);--elevated:oklch(0.269 0 0);--line:oklch(1 0 0 / 10%);--text:oklch(0.985 0 0);--muted:oklch(0.708 0 0);--faint:oklch(0.556 0 0);--accent:#1783FF}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif}
 button,input,select{font:inherit}
@@ -28,7 +28,7 @@ canvas#cv{display:block;max-width:100%;max-height:calc(100vh - 96px);border-radi
 #dynPanel{display:flex;flex-direction:column}
 
 /* 按钮 */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:32px;padding:0 12px;border-radius:6px;font-size:13px;font-weight:500;border:1px solid var(--line);background:var(--elevated);color:var(--text);transition:filter .15s ease-out}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:36px;padding:0 12px;border-radius:8px;font-size:13px;font-weight:500;border:1px solid var(--line);background:var(--elevated);color:var(--text);transition:filter .15s ease-out}
 .btn:hover:not(:disabled){filter:brightness(1.12)}
 .btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .big-actions{display:flex;flex-direction:column;gap:8px}
@@ -40,7 +40,7 @@ canvas#cv{display:block;max-width:100%;max-height:calc(100vh - 96px);border-radi
 
 /* 模式切换 */
 .mode-tabs{display:flex;flex-wrap:wrap;gap:8px}
-.mode-tabs button{min-height:32px;padding:0 12px;border-radius:6px;font-size:12px;border:1px solid var(--line);background:var(--elevated);color:var(--muted);transition:filter .15s ease-out}
+.mode-tabs button{min-height:36px;padding:0 12px;border-radius:8px;font-size:12px;border:1px solid var(--line);background:var(--elevated);color:var(--muted);transition:filter .15s ease-out}
 .mode-tabs button:hover:not(.active){filter:brightness(1.12);color:var(--text)}
 .mode-tabs button.active{background:var(--accent);border-color:var(--accent);color:#fff}
 
