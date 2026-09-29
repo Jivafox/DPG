@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Geometry · DPG</title>
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<main class="app-shell">
+  <aside class="panel" id="panel" aria-label="生成参数">
+    <div class="brand">
+      <p class="eyebrow">DPG / 06</p>
+      <h1>Geometry</h1>
+      <p class="intro">以和谐比例与经典分割生成几何构造图形，支持 PNG 与矢量 SVG 导出。</p>
+    </div>
+    <div class="section">
+      <div class="section-title">生成 Generate</div>
+      <div class="big-actions">
+        <button class="btn btn-primary" id="btnRandom">随机生成</button>
+        <button class="btn" id="btnReseed">换个种子（保持参数）</button>
+        <button class="btn invert" id="btnInvert">
+          <span class="invert-preview"><i style="background:#101010"></i><i style="background:#f2eee2"></i></span>
+          <span id="invertTxt">黑底白线</span>
+        </button>
+        <div class="row scale-row">
+          <label for="scaleSel">PNG 倍数</label>
+          <select id="scaleSel">
+            <option value="1">1×（1800px）</option>
+            <option value="2" selected>2×（3600px）</option>
+            <option value="3">3×（5400px）</option>
+            <option value="4">4×（7200px）</option>
+          </select>
+        </div>
+        <button class="btn" id="btnExportPNG">导出 PNG</button>
+        <button class="btn" id="btnExportSVG">导出 SVG（矢量）</button>
+      </div>
+      <div class="hint">“随机生成”重掷种子与当前模式的参数；“换个种子”只换种子，参数不变。</div>
+    </div>
+    <div class="section">
+      <div class="section-title">模式 Mode</div>
+      <div class="mode-tabs" id="modeTabs"></div>
+    </div>
+    <div id="dynPanel"></div>
+    <div class="section">
+      <div class="section-title">种子 / 画幅</div>
+      <div class="seed-row">
+        <input type="number" id="seedInput" aria-label="随机种子">
+        <button class="btn seed-btn" id="btnDice" title="随机种子" aria-label="随机种子">⟳</button>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <label for="aspSel">画幅比例</label>
+        <select id="aspSel">
+          <option value="1:1" selected>1:1</option>
+          <option value="4:3">4:3</option>
+          <option value="3:4">3:4</option>
+          <option value="16:9">16:9</option>
+          <option value="9:16">9:16</option>
+        </select>
+      </div>
+    </div>
+  </aside>
+  <section class="stage" aria-label="图形预览">
+    <div class="stage-toolbar"><span>预览</span><span id="canvasMeta">1600 × 1600</span></div>
+    <div class="canvas-area"><canvas id="cv" width="1600" height="1600"></canvas></div>
+  </section>
+</main>
+<script src="./app.js" defer></script>
+</body>
+</html>
