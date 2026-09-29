@@ -13,7 +13,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .stage-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 18px;border-bottom:1px solid var(--line);color:var(--muted);font-size:12px}
 #canvasMeta{font-variant-numeric:tabular-nums}
 .canvas-area{display:grid;place-items:center;min-height:0;padding:22px;overflow:hidden}
-canvas#cv{display:block;max-width:100%;max-height:100%;border-radius:6px;box-shadow:0 0 0 1px var(--line)}
+canvas#cv{display:block;max-width:100%;max-height:calc(100vh - 96px);border-radius:6px;box-shadow:0 0 0 1px var(--line)}
 
 /* 面板内的紧凑标识块（与其他工具一致） */
 .brand{margin-bottom:8px}
@@ -77,6 +77,7 @@ select,input[type=number]{width:100%;height:38px;background:var(--elevated);colo
 @media(max-width:860px){
   .app-shell{grid-template-columns:1fr}
   .stage{grid-row:1;min-height:280px;height:48vh;position:sticky;top:0;z-index:2;border-bottom:1px solid var(--line)}
+  canvas#cv{max-height:calc(48vh - 96px)}
   .panel{height:auto;overflow:visible;border-right:0}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
