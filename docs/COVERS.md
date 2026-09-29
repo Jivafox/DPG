@@ -2,6 +2,11 @@
 
 每个工具的封面默认放在 `tools/<slug>/assets/cover.png`。ASCII Studio 对应 `tools/ascii-studio/assets/cover.png`，首页会实际读取这张图片。
 
+- ASCII Studio 2.0：`tools/ascii-motion/assets/cover.png`
+- Wax Seal：`tools/wax-seal/assets/cover.png`
+
+这两张默认封面由工具自身画布生成，尺寸为 640 × 480px；直接替换对应 PNG 即可。
+
 替换步骤：
 
 1. 准备可公开的 PNG 图片，先在仓库外检查图片可见内容及元数据。
