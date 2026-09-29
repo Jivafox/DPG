@@ -9,6 +9,9 @@ try {
   if (git('cat-file', '-t', `refs/tags/${tag}`) !== 'tag') throw new Error();
   const commit = git('rev-parse', `refs/tags/${tag}^{commit}`);
   if (commit !== git('rev-parse', 'HEAD')) throw new Error();
+  const eventCommit = process.env.GITHUB_SHA;
+  if (process.env.GITHUB_ACTIONS === 'true' && !eventCommit) throw new Error();
+  if (eventCommit && (!/^[0-9a-f]{40}$/i.test(eventCommit) || commit !== eventCommit.toLowerCase())) throw new Error();
   git('merge-base', '--is-ancestor', commit, 'origin/main');
   const record = fs.readFileSync(path.join(root, 'docs/releases', `${tag}.md`), 'utf8');
   if (!record.split(/\r?\n/).includes(`Version: ${tag}`)) throw new Error();

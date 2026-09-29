@@ -14,10 +14,13 @@ function fixture(t, type = 'site') {
   git('init', '-q', '-b', 'main'); git('config', 'user.name', 'Fixture'); git('config', 'user.email', 'fixture@example.invalid');
   git('config', 'commit.gpgsign', 'false'); git('config', 'tag.gpgsign', 'false');
   git('add', '.'); git('commit', '-qm', 'fixture'); git('update-ref', 'refs/remotes/origin/main', 'HEAD');
-  const run = () => spawnSync(process.execPath, [path.join(root, 'scripts/release-check.mjs')], { env: { ...process.env, GITHUB_REF_NAME: 'v0.1.0', GITHUB_OUTPUT: path.join(root, 'result') }, encoding: 'utf8' });
+  const run = (extraEnv = {}) => spawnSync(process.execPath, [path.join(root, 'scripts/release-check.mjs')], { env: { ...process.env, GITHUB_ACTIONS: '', GITHUB_SHA: '', GITHUB_REF_NAME: 'v0.1.0', GITHUB_OUTPUT: path.join(root, 'result'), ...extraEnv }, encoding: 'utf8' });
   return { root, git, run };
 }
 test('annotated site version on main is eligible', t => { const { git, run, root } = fixture(t); git('tag', '-a', 'v0.1.0', '-m', 'fixture'); assert.equal(run().status, 0); assert.match(fs.readFileSync(path.join(root, 'result'), 'utf8'), /deploy=true/); });
 test('specification version does not deploy', t => { const { git, run, root } = fixture(t, 'spec'); git('tag', '-a', 'v0.1.0', '-m', 'fixture'); assert.equal(run().status, 0); assert.match(fs.readFileSync(path.join(root, 'result'), 'utf8'), /deploy=false/); });
 test('lightweight tag is rejected', t => { const { git, run } = fixture(t); git('tag', 'v0.1.0'); assert.notEqual(run().status, 0); });
 test('version not in remote main is rejected', t => { const { git, run } = fixture(t); git('commit', '--allow-empty', '-qm', 'unreviewed'); git('tag', '-a', 'v0.1.0', '-m', 'fixture'); assert.notEqual(run().status, 0); });
+test('Actions event commit matching the annotated tag is eligible', t => { const { git, run } = fixture(t); git('tag', '-a', 'v0.1.0', '-m', 'fixture'); assert.equal(run({ GITHUB_ACTIONS: 'true', GITHUB_SHA: git('rev-parse', 'HEAD').toString().trim() }).status, 0); });
+test('tag moved from the triggering event commit is rejected', t => { const { git, run } = fixture(t); const eventCommit = git('rev-parse', 'HEAD').toString().trim(); git('commit', '--allow-empty', '-qm', 'later'); git('update-ref', 'refs/remotes/origin/main', 'HEAD'); git('tag', '-a', 'v0.1.0', '-m', 'fixture'); assert.notEqual(run({ GITHUB_ACTIONS: 'true', GITHUB_SHA: eventCommit }).status, 0); });
+test('Actions without an event commit is rejected', t => { const { git, run } = fixture(t); git('tag', '-a', 'v0.1.0', '-m', 'fixture'); assert.notEqual(run({ GITHUB_ACTIONS: 'true' }).status, 0); });
