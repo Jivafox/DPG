@@ -2,7 +2,7 @@
 
 Design Playground — 公开的交互工具与视觉实验工作空间。
 
-主站使用深色单栏首页，直接展示全部工具；点击进入站内运行页，可返回首页或独立打开。不设分类、搜索或筛选。当前工作版本包含 ASCII Studio、ASCII Studio 2.0 和 Wax Seal，新增工具的本地审核见 [接入记录](docs/qa/NEW_TOOLS.md)。源码通过功能分支与 PR 管理，线上版本以 GitHub Release 和 Pages 部署记录为准。
+主站采用 V2 中性深色主题与白色高亮，通过响应式网格直接展示全部工具；点击进入站内运行页，可返回首页或独立打开。不设分类、搜索或筛选。当前工作版本包含七个工具，最新视觉、封面和 Logo 变更见 [v0.3.0 发布准备记录](docs/releases/v0.3.0.md)。源码通过功能分支与 PR 管理，线上版本以 GitHub Release 和 Pages 部署记录为准。
 
 ## 本地运行
 
@@ -20,7 +20,17 @@ npm run preview
 
 更换首页工具封面：覆盖该工具的 `assets/cover.png` 后重新构建即可，详见 [封面替换说明](docs/COVERS.md)。
 
-[ASCII Studio](tools/ascii-studio/index.html) 支持图片/视频转字符画、自定义 SVG 字符与图片、矢量及无声视频导出。已通过本地接入验证并纳入构建，`published` 是构建资格，不表示已经上线。素材在本机处理，字体使用本机字体。详情见 [工具验收](docs/qa/ASCII_STUDIO.md) 与 [主站验收](docs/qa/SITE_V1.md)。
+| 工具 | 用途 |
+| --- | --- |
+| [ASCII I](tools/ascii-studio/index.html) | 图片/视频转字符画，自定义 SVG 字符与图片，矢量及无声视频导出 |
+| [ASCII II](tools/ascii-motion/index.html) | 动态渐变字符画 |
+| [Seal](tools/wax-seal/index.html) | 火漆印章交互 |
+| [Gradient I](tools/gradient/index.html) | 渐变纹理生成与 PNG 导出 |
+| [Gradient II](tools/gradient-curves/index.html) | 曲线场渐变、动画与图片导出 |
+| [Geometry](tools/geometry/index.html) | 几何构图与 PNG/SVG 导出 |
+| [Sphere](tools/sphere/index.html) | 可旋转的三维符号球 |
+
+以上工具已纳入本地构建；`published` 是构建资格，不表示已经上线。历史接入与验收记录保留当时的名称和视觉描述，当前视觉规范以 [设计系统 V2](docs/DESIGN_SYSTEM.md) 为准。
 
 ## 规范与协作
 

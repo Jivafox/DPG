@@ -14,7 +14,7 @@ const subpathURL=process.env.DPG_QA_SUBPATH_URL || 'http://127.0.0.1:4175/DPG/';
   await page.locator('.tool-card[data-tool=ascii-studio]').click();await page.locator('iframe').waitFor();const frame=page.frameLocator('iframe');await frame.locator('#textGlyphs').waitFor();
   check(page.url()===base+'?tool=ascii-studio','detail URL');
   await frame.locator('#textGlyphs').fill('TEST');await page.reload();await page.frameLocator('iframe').locator('#textGlyphs').waitFor();
-  check(await page.locator('#detail-title').textContent()==='ASCII Studio','detail refresh');
+  check(await page.locator('#detail-title').textContent()==='ASCII I','detail refresh');
   const popup=context.waitForEvent('page');await page.locator('#open-tool').click();const standalone=await popup;await standalone.waitForLoadState();check(standalone.url()===base+'tools/ascii-studio/index.html','standalone URL');await standalone.close();
   await page.locator('.back-link').click();check(await page.locator('iframe').count()===0,'return iframe cleanup');check(page.url()===base,'return home URL');
   await page.goBack();await page.frameLocator('iframe').locator('#textGlyphs').waitFor();await page.goForward();await page.locator('.tool-card[data-tool=ascii-studio]').waitFor();
