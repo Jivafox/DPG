@@ -1,0 +1,13 @@
+{
+  "id": "sphere",
+  "name": "Sphere",
+  "description": "数千个符号按“大陆”分布拼成缓缓自转的球，拖拽旋转、调整分布，也可上传自己的符号。",
+  "tags": ["球体", "符号", "3D"],
+  "entry": "index.html",
+  "version": "1.0.0",
+  "created": "2026-09-29",
+  "updated": "2026-09-29",
+  "status": "published",
+  "cover": "assets/cover.png",
+  "capabilities": []
+}
