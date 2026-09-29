@@ -1,13 +1,30 @@
 :root {
   color-scheme: dark;
-  --bg-canvas: #0b0c0f;
-  --bg-surface: #111318;
-  --bg-elevated: #191b21;
-  --bg-hover: #202229;
-  --text-primary: #f0f1f3;
-  --text-secondary: #a0a3ad;
-  --text-muted: #777b86;
-  --border-subtle: #272a31;
-  --accent: #1783FF;
-  --focus-ring: #1783FF;
+
+  /* shadcn/ui 语义 token（neutral 深色主题），DPG 蓝作为 primary/ring */
+  --background: oklch(0.145 0 0);            /* 页面画布 ≈ #09090b */
+  --foreground: oklch(0.985 0 0);            /* 主文字 ≈ #fafafa */
+  --card: oklch(0.205 0 0);                  /* 卡片表面 ≈ #18181b */
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);               /* 浮层表面 */
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: #1783FF;                        /* 品牌主色（DPG 蓝） */
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.269 0 0);             /* 次级填充 ≈ #27272a */
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);                 /* 弱表面 */
+  --muted-foreground: oklch(0.708 0 0);      /* 次文字 ≈ #a1a1aa */
+  --hover: oklch(0.269 0 0);                 /* 悬停表面 */
+  --hover-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);              /* 默认细边 */
+  --input: oklch(1 0 0 / 15%);               /* 输入框边 */
+  --ring: #1783FF;                           /* 聚焦环 */
+
+  /* 圆角比例尺（以 --radius 为基准） */
+  --radius: 10px;
+  --radius-sm: calc(var(--radius) * 0.6);    /* 6px */
+  --radius-md: calc(var(--radius) * 0.8);    /* 8px */
+  --radius-lg: var(--radius);                /* 10px */
+  --radius-xl: calc(var(--radius) * 1.4);    /* 14px */
 }
