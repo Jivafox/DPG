@@ -1,0 +1,13 @@
+{
+  "id": "geometry",
+  "name": "Geometry",
+  "description": "以和谐比例与经典分割生成几何构造图形：七种构图模式、种子复现，支持 PNG 与矢量 SVG 导出。",
+  "tags": ["几何", "构造", "生成"],
+  "entry": "index.html",
+  "version": "1.0.0",
+  "created": "2026-09-29",
+  "updated": "2026-09-29",
+  "status": "published",
+  "cover": "assets/cover.png",
+  "capabilities": ["download"]
+}

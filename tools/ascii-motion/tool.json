@@ -1,10 +1,10 @@
 {
   "id": "ascii-motion",
-  "name": "ASCII Studio 2.0",
+  "name": "ASCII II",
   "description": "将动态渐变转为字符画，调整图形、混合与颗粒，导出 PNG 或动画视频。",
   "tags": ["字符画", "渐变", "动画"],
   "entry": "index.html",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "created": "2026-09-29",
   "updated": "2026-09-29",
   "status": "published",

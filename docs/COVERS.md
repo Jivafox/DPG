@@ -1,11 +1,18 @@
 # 工具封面替换
 
-每个工具的封面默认放在 `tools/<slug>/assets/cover.png`。ASCII Studio 对应 `tools/ascii-studio/assets/cover.png`，首页会实际读取这张图片。
+每个工具的封面默认放在 `tools/<slug>/assets/cover.png`，首页会实际读取这张图片。
 
-- ASCII Studio 2.0：`tools/ascii-motion/assets/cover.png`
-- Wax Seal：`tools/wax-seal/assets/cover.png`
+| 工具 | 替换路径 |
+| --- | --- |
+| ASCII I | `tools/ascii-studio/assets/cover.png` |
+| ASCII II | `tools/ascii-motion/assets/cover.png` |
+| Seal | `tools/wax-seal/assets/cover.png` |
+| Gradient I | `tools/gradient/assets/cover.png` |
+| Gradient II | `tools/gradient-curves/assets/cover.png` |
+| Geometry | `tools/geometry/assets/cover.png` |
+| Sphere | `tools/sphere/assets/cover.png` |
 
-这两张默认封面由工具自身画布生成，尺寸为 640 × 480px；直接替换对应 PNG 即可。
+当前七张封面为更新后的图片素材，尺寸均为 640 × 480px；直接替换对应 PNG 即可。首页以 4:3 比例显示封面，圆角为 14px，卡片文字位于图片下方。
 
 替换步骤：
 
@@ -20,3 +27,7 @@
 构建会将 cover 字段写入 catalog，并复制图片。省略 cover 时显示编号占位；已配置但文件不存在时阻断构建；网络或图片解码失败时回退为编号，工具入口仍可使用。封面和名称已在同一卡片内呈现，因此图片为装饰内容，不重复播报名称。
 
 更新公开网站仍需重新构建、检查和经确认发布，仅替换本地图片不会自动推送或上线。
+
+## Logo
+
+站点 Logo 位于 `site/assets/mark.svg`，由顶栏标识与浏览器 favicon 共用。当前图形为白色放射形标记与圆点。替换时保留 SVG 文件名与有效 viewBox，检查小尺寸辨识度、透明背景及深色页面上的对比；先审核可见图形和元数据，再重新构建，检查顶栏与浏览器图标。不要直接修改 `dist/assets/mark.svg`。

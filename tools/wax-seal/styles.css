@@ -1,5 +1,69 @@
-:root{color-scheme:dark;--bg:#0b0c0f;--panel:#111318;--elevated:#191b21;--line:#272a31;--text:#f0f1f3;--muted:#a0a3ad;--accent:#1783FF}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif}button,input{font:inherit}button{cursor:pointer}button:disabled{cursor:default;opacity:.4}button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}header{display:flex;justify-content:space-between;align-items:center;padding:20px 28px;border-bottom:1px solid var(--line);color:var(--muted);font-size:12px}.brand{letter-spacing:.12em}.edition{font-size:12px}main{max-width:1000px;margin:auto;padding:32px 28px}.eyebrow{color:var(--muted);font-size:11px;letter-spacing:.12em}h1{font-size:28px;letter-spacing:-.6px;margin:6px 0 10px;font-weight:600}.intro{color:var(--muted);margin:0 0 24px;font-size:13px}.field{width:min(360px,100%)}label{display:block;font-size:12px;color:var(--muted);margin-bottom:8px}.input-wrap{position:relative}input[type=text],input:not([type]){height:38px;padding:0 64px 0 12px;border:1px solid var(--line);border-radius:6px;background:var(--elevated);color:var(--text);width:100%}input::placeholder{color:#777b86}.count{position:absolute;right:12px;top:10px;font-size:12px;color:var(--muted)}.workbench{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:28px;margin-top:24px;align-items:start}.preview{min-width:0;text-align:center;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px}.stage{position:relative;width:min(440px,100%);aspect-ratio:1;margin:auto;display:grid;place-items:center}.stage:before{content:"";position:absolute;width:77%;height:77%;border:1px solid var(--line);border-radius:50%;pointer-events:none}.seal-button{position:relative;width:100%;height:100%;border:0;background:transparent;padding:0;cursor:default;touch-action:manipulation;user-select:none;-webkit-tap-highlight-color:transparent}.seal-button[aria-disabled=false]{cursor:pointer}.seal-button:focus-visible{border-radius:50%;outline-offset:-12px}canvas{width:100%;height:100%;display:block;pointer-events:none}.status{font-size:12px;min-height:36px;color:var(--muted)}.dot{display:inline-block;width:5px;height:5px;background:#777b86;border-radius:50%;margin-right:8px}.ready .dot{background:var(--accent)}.pressure{height:3px;width:100px;background:var(--line);margin:8px auto 0;border-radius:3px;overflow:hidden}.pressure span{display:block;height:100%;width:0;background:var(--accent)}.actions{min-height:52px;margin-top:16px}#reset{min-height:32px;padding:0 12px;border:1px solid var(--line);border-radius:6px;background:var(--elevated);color:var(--text)}.material-panel{padding:20px;border:1px solid var(--line);border-radius:8px;background:var(--panel)}.panel-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}.panel-heading h2{font-size:14px;margin:0;font-weight:600}.panel-heading button{background:none;border:0;color:var(--muted);font-size:12px;min-height:32px;padding:0}.panel-note{font-size:12px;color:var(--muted);margin:8px 0 20px}.material-control{margin-top:24px}.material-control label{display:flex;align-items:center;justify-content:space-between;gap:8px}.material-control output{font-size:12px;font-variant-numeric:tabular-nums;color:var(--text)}.color-row{display:flex;align-items:center;gap:8px}.color-row input[type=color]{width:38px;height:36px;padding:4px;flex-shrink:0;border:1px solid var(--line);border-radius:6px;background:var(--elevated);cursor:pointer}.color-row input[type=text]{width:90px;padding:0 8px;font:12px ui-monospace,monospace}.color-preview-label{font-size:12px;color:var(--muted)}#color-error{font-size:12px;color:#ff9c9c;display:block;margin-top:6px}.material-control input[type=range]{width:100%;display:block;accent-color:var(--accent);cursor:pointer;margin:12px 0}.range-captions{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-top:6px}.grain-control{border-top:1px solid var(--line);padding-top:20px}.grain-label input{width:16px;height:16px;accent-color:var(--accent)}.grain-amount{opacity:.45}.grain-control:has(input:checked) .grain-amount{opacity:1}footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding:20px 0;margin-top:28px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}.step{display:flex;gap:8px}.step b{color:var(--accent);font-weight:500}button:hover:not(:disabled){filter:brightness(1.12)}
-@media(max-width:760px){.workbench{grid-template-columns:1fr}.material-panel{width:100%}.preview{padding:12px}.stage{max-width:360px}}
-@media(max-width:520px){header{padding:16px 20px}main{padding:24px 20px}h1{font-size:24px}.workbench{gap:16px}.material-panel{padding:20px}.status{min-height:44px}footer{flex-direction:column;gap:12px}}
+:root{color-scheme:dark;--bg:oklch(0.145 0 0);--panel:oklch(0.205 0 0);--elevated:oklch(0.269 0 0);--line:oklch(1 0 0 / 10%);--text:oklch(0.985 0 0);--muted:oklch(0.708 0 0);--accent:#fff;--on-accent:oklch(0.205 0 0)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif}button,input{font:inherit}button{cursor:pointer}button:disabled{cursor:default;opacity:.4}button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}button:hover:not(:disabled){filter:brightness(1.12)}
+
+/* 布局与 ASCII Studio 一致：左侧固定参数面板 + 右侧开放预览区 */
+.app-shell{display:grid;grid-template-columns:minmax(300px,340px) minmax(0,1fr);min-height:100vh}
+.panel{height:100vh;overflow-y:auto;overscroll-behavior:contain;border-right:1px solid var(--line);background:var(--panel);padding:22px}
+.stage{display:grid;grid-template-rows:52px minmax(0,1fr) auto;min-width:0;background:#000}
+.stage-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 18px;border-bottom:1px solid var(--line);color:var(--muted);font-size:12px}
+.stage-footer{display:flex;align-items:center;justify-content:center;gap:16px;padding:12px 18px;border-top:1px solid var(--line)}
+
+.brand{margin-bottom:8px}
+.brand .eyebrow{color:var(--muted);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.brand h1{font-size:24px;letter-spacing:-.3px;margin:8px 0 0;font-weight:600}
+.brand .intro{color:var(--muted);font-size:12px;line-height:1.6;margin:12px 0 0}
+
+.control-group{padding:18px 0;border-top:1px solid var(--line)}
+.control-group:first-of-type{border-top:0}
+.group-title{display:block;font-size:14px;font-weight:600;margin:0 0 12px}
+h2.group-title{font-size:14px}
+
+.input-wrap{position:relative}
+.input-wrap input{height:38px;padding:0 64px 0 12px;border:1px solid var(--line);border-radius:6px;background:var(--elevated);color:var(--text);width:100%}
+input::placeholder{color:oklch(0.556 0 0)}
+.count{position:absolute;right:12px;top:10px;font-size:12px;color:var(--muted)}
+
+.panel-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.panel-heading h2{font-size:14px;margin:0;font-weight:600}
+.panel-heading button{background:none;border:0;color:var(--muted);font-size:12px;min-height:36px;padding:0}
+.panel-note{font-size:12px;color:var(--muted);margin:8px 0 0}
+.steps span{display:flex;gap:8px;margin-top:6px}
+.steps b{color:var(--accent);font-weight:500}
+
+.material-control{margin-top:24px}
+.material-control label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted)}
+.material-control output{font-size:12px;font-variant-numeric:tabular-nums;color:var(--text)}
+.color-row{display:flex;align-items:center;gap:8px;margin-top:8px}
+.color-row input[type=color]{width:38px;height:36px;padding:4px;flex-shrink:0;border:1px solid var(--line);border-radius:6px;background:var(--elevated);cursor:pointer}
+.color-row input[type=text]{width:90px;height:38px;padding:0 8px;border:1px solid var(--line);border-radius:6px;background:var(--elevated);color:var(--text);font:12px ui-monospace,monospace}
+.color-preview-label{font-size:12px;color:var(--muted)}
+#color-error{font-size:12px;color:#ff9c9c;display:block;margin-top:6px}
+.material-control input[type=range]{width:100%;display:block;accent-color:var(--accent);cursor:pointer;margin:12px 0}
+.range-captions{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-top:6px}
+.grain-control{border-top:1px solid var(--line);padding-top:20px}
+.grain-label input{width:16px;height:16px;accent-color:var(--accent)}
+.grain-amount{opacity:.45}
+.grain-control:has(input:checked) .grain-amount{opacity:1}
+
+/* 印章预览（开放区域，不再套面板窗口） */
+.seal-area{display:grid;place-items:center;min-height:0;padding:22px;overflow:hidden}
+.seal-button{position:relative;width:min(440px,100%,calc(100vh - 200px));aspect-ratio:1;border:0;background:transparent;padding:0;cursor:default;touch-action:manipulation;user-select:none;-webkit-tap-highlight-color:transparent}
+.seal-button[aria-disabled=false]{cursor:pointer}
+.seal-button:focus-visible{border-radius:50%;outline-offset:-12px}
+.seal-button canvas{width:100%;height:100%;display:block;pointer-events:none}
+
+.status{display:flex;align-items:center;min-width:0;font-size:12px;color:var(--muted)}
+#message{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dot{display:inline-block;width:5px;height:5px;flex:none;background:oklch(0.556 0 0);border-radius:50%;margin-right:8px}
+.ready .dot{background:var(--accent)}
+.pressure{height:3px;width:100px;background:var(--line);border-radius:3px;overflow:hidden}
+.pressure span{display:block;height:100%;width:0;background:var(--accent)}
+#reset{min-height:36px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:var(--elevated);color:var(--text)}
+
+@media(max-width:860px){
+  .app-shell{grid-template-columns:1fr}
+  .stage{grid-row:1;height:56vh;min-height:320px;position:sticky;top:0;z-index:2;border-bottom:1px solid var(--line)}
+  .seal-button{width:min(440px,100%,calc(56vh - 170px))}
+  .panel{height:auto;overflow:visible;border-right:0;padding:20px}
+}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}

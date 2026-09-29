@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gradient I · DPG</title>
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<main class="app-shell">
+  <aside class="panel" aria-label="生成参数">
+    <div class="brand">
+      <p class="eyebrow">DPG / 04</p>
+      <h1>Gradient I</h1>
+      <p class="intro">随机生成和谐配色与柔和渐变的纹理画面，调节质感后导出高分辨率 PNG。</p>
+    </div>
+    <div class="section">
+      <div class="section-title">生成 Generate</div>
+      <div class="row">
+        <label for="preset">画布比例 / 尺寸</label>
+        <select id="preset">
+          <option value="1200x1600" selected>竖版 3:4（1200 × 1600）</option>
+          <option value="1600x1600">方形 1:1（1600 × 1600）</option>
+          <option value="1920x1080">横版 16:9（1920 × 1080）</option>
+          <option value="1080x1920">手机竖屏 9:16（1080 × 1920）</option>
+          <option value="2480x3508">A4 印刷 300dpi（2480 × 3508）</option>
+        </select>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btnRandom">随机生成图案</button>
+      </div>
+      <div class="hint">“随机生成图案”会重新排布图案位置与虚实层次，配色保持不变。</div>
+    </div>
+    <div class="section">
+      <div class="section-title">配色 Colors</div>
+      <div class="row">
+        <label>颜色数量 <span class="val" id="colorCountVal">5</span></label>
+        <input type="range" id="colorCount" min="2" max="8" step="1" value="5" aria-label="颜色数量">
+      </div>
+      <div class="color-list" id="colorList"></div>
+      <div class="btn-row">
+        <button class="btn" id="btnPalette">随机配色</button>
+        <button class="btn" id="btnShuffleOne" title="打乱现有颜色顺序">打乱顺序</button>
+      </div>
+      <div class="hint">点击色块或输入十六进制色值可精确调整每个颜色。</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">图案 Pattern</div>
+      <div class="row">
+        <label>图案数量 <span class="val" id="blobCountVal">9</span></label>
+        <input type="range" id="blobCount" min="2" max="30" step="1" value="9" aria-label="图案数量">
+      </div>
+      <div class="row">
+        <label>图案尺寸 <span class="val" id="blobSizeVal">0.42</span></label>
+        <input type="range" id="blobSize" min="0.1" max="1" step="0.01" value="0.42" aria-label="图案尺寸">
+      </div>
+      <div class="row">
+        <label>尺寸差异 <span class="val" id="sizeVarVal">0.6</span></label>
+        <input type="range" id="sizeVar" min="0" max="1" step="0.01" value="0.6" aria-label="尺寸差异">
+      </div>
+      <div class="row">
+        <label>边缘柔和（羽化）<span class="val" id="softVal">0.75</span></label>
+        <input type="range" id="soft" min="0.2" max="1" step="0.01" value="0.75" aria-label="边缘柔和">
+      </div>
+      <div class="row">
+        <label>虚实变化（景深）<span class="val" id="focusVal">0.65</span></label>
+        <input type="range" id="focus" min="0" max="1" step="0.01" value="0.65" aria-label="虚实变化">
+        <div class="hint">数值越高，部分图案越模糊、部分越清晰，形成前后景的虚实层次。</div>
+      </div>
+      <div class="row">
+        <label>颜色叠加浓度 <span class="val" id="alphaVal">0.92</span></label>
+        <input type="range" id="alpha" min="0.3" max="1" step="0.01" value="0.92" aria-label="颜色叠加浓度">
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">质感 Texture</div>
+      <div class="row">
+        <label>散点密度 <span class="val" id="speckVal">0.5</span></label>
+        <input type="range" id="speck" min="0" max="1" step="0.01" value="0.5" aria-label="散点密度">
+      </div>
+      <div class="row">
+        <label>散点尺寸 <span class="val" id="speckSizeVal">1</span></label>
+        <input type="range" id="speckSize" min="0.3" max="3" step="0.1" value="1" aria-label="散点尺寸">
+      </div>
+      <div class="row">
+        <label>噪点强度 <span class="val" id="grainVal">0.35</span></label>
+        <input type="range" id="grain" min="0" max="1" step="0.01" value="0.35" aria-label="噪点强度">
+      </div>
+      <div class="row">
+        <label for="bgColor">底色</label>
+        <select id="bgColor">
+          <option value="#f3efe6" selected>米白纸面</option>
+          <option value="#faf8f4">纯白</option>
+          <option value="#efe9dc">暖牛皮纸</option>
+          <option value="#1c1c1e">深色</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">输出 Export</div>
+      <div class="row">
+        <label for="exportScale">导出倍率</label>
+        <select id="exportScale">
+          <option value="1" selected>1x（按所选尺寸原图导出）</option>
+          <option value="2">2x（两倍分辨率）</option>
+          <option value="3">3x（三倍分辨率）</option>
+          <option value="4">4x（四倍分辨率）</option>
+        </select>
+      </div>
+      <button class="btn" id="btnDownload">下载 PNG</button>
+    </div>
+  </aside>
+  <section class="stage" aria-label="渐变预览">
+    <div class="stage-toolbar"><span>预览</span><span id="canvasMeta">1200 × 1600</span></div>
+    <div class="canvas-area">
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="preview"></canvas>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- 状态 ----------
+  const state = {
+    colors: ["#f2c94c", "#e2703a", "#d94f3d", "#f7e9c9", "#7fb8ad"],
+    seedLayout: 12345,   // 布局随机种子
+    renderW: 1200,
+    renderH: 1600,
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const preview = $("preview");
+  const pctx = preview.getContext("2d");
+
+  // 离屏渲染画布（实际输出分辨率）
+  const off = document.createElement("canvas");
+  const octx = off.getContext("2d");
+
+  // ---------- 工具函数 ----------
+  function mulberry32(seed) {
+    let a = seed >>> 0;
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function hexToRgb(hex) {
+    const h = hex.replace("#", "");
+    const v = parseInt(h.length === 3 ? h.split("").map(c => c + c).join("") : h, 16);
+    return [(v >> 16) & 255, (v >> 8) & 255, v & 255];
+  }
+  function rgbToHex(r, g, b) {
+    return "#" + [r, g, b].map(v => Math.round(Math.max(0, Math.min(255, v))).toString(16).padStart(2, "0")).join("");
+  }
+  function hslToHex(h, s, l) {
+    s /= 100; l /= 100;
+    const k = n => (n + h / 30) % 12;
+    const a = s * Math.min(l, 1 - l);
+    const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+    return rgbToHex(f(0) * 255, f(8) * 255, f(4) * 255);
+  }
+
+  // ---------- 随机配色（生成和谐色组） ----------
+  function randomPalette(n) {
+    const rng = Math.random;
+    const schemes = ["warm", "candy", "botanic", "sunset"];
+    const scheme = schemes[Math.floor(rng() * schemes.length)];
+    const colors = [];
+    if (scheme === "warm") {           // 暖黄-橙-红
+      const base = 25 + rng() * 30;
+      for (let i = 0; i < n; i++) {
+        const h = (base + i * (55 / Math.max(n - 1, 1)) + rng() * 14 - 7 + 360) % 360;
+        colors.push(hslToHex(h, 72 + rng() * 25, 46 + rng() * 18));
+      }
+    } else if (scheme === "candy") {   // 粉彩糖果
+      const base = rng() * 360;
+      for (let i = 0; i < n; i++) {
+        const h = (base + i * (300 / n) + rng() * 20 - 10 + 360) % 360;
+        colors.push(hslToHex(h, 60 + rng() * 25, 56 + rng() * 18));
+      }
+    } else if (scheme === "botanic") { // 植物绿-青-黄
+      const base = 80 + rng() * 60;
+      for (let i = 0; i < n; i++) {
+        const h = (base + i * (90 / Math.max(n - 1, 1)) + rng() * 16 - 8 + 360) % 360;
+        colors.push(hslToHex(h, 50 + rng() * 30, 40 + rng() * 22));
+      }
+    } else {                           // 日落：粉-紫-橙
+      const base = 300 + rng() * 60;
+      for (let i = 0; i < n; i++) {
+        const h = (base + i * (120 / Math.max(n - 1, 1)) + rng() * 14 - 7) % 360;
+        colors.push(hslToHex(h, 62 + rng() * 28, 48 + rng() * 18));
+      }
+    }
+    // 随机把一个颜色提亮，作为浅色的"留白呼吸色"
+    if (n >= 3 && rng() < 0.8) {
+      const idx = Math.floor(rng() * n);
+      const [r, g, b] = hexToRgb(colors[idx]);
+      colors[idx] = rgbToHex(r + (255 - r) * 0.72, g + (255 - g) * 0.72, b + (255 - b) * 0.72);
+    }
+    return colors;
+  }
+
+  function randomColorNear() {
+    return hslToHex(Math.random() * 360, 50 + Math.random() * 35, 45 + Math.random() * 30);
+  }
+
+  // ---------- 颜色列表 UI ----------
+  function rebuildColorList() {
+    const list = $("colorList");
+    list.innerHTML = "";
+    state.colors.forEach((c, i) => {
+      const item = document.createElement("div");
+      item.className = "color-item";
+
+      const picker = document.createElement("input");
+      picker.type = "color";
+      picker.value = c;
+      picker.setAttribute("aria-label", "颜色 " + (i + 1));
+      picker.addEventListener("input", () => {
+        state.colors[i] = picker.value;
+        text.value = picker.value;
+        render();
+      });
+
+      const text = document.createElement("input");
+      text.type = "text";
+      text.value = c;
+      text.spellcheck = false;
+      text.setAttribute("aria-label", "颜色 " + (i + 1) + " HEX 色值");
+      text.addEventListener("change", () => {
+        let v = text.value.trim();
+        if (!v.startsWith("#")) v = "#" + v;
+        if (/^#[0-9a-fA-F]{6}$/.test(v) || /^#[0-9a-fA-F]{3}$/.test(v)) {
+          state.colors[i] = v;
+          picker.value = v.length === 4
+            ? "#" + v.slice(1).split("").map(ch => ch + ch).join("")
+            : v;
+          render();
+        } else {
+          text.value = state.colors[i];
+        }
+      });
+
+      const rand = document.createElement("button");
+      rand.className = "rand-one";
+      rand.title = "随机换一个颜色";
+      rand.setAttribute("aria-label", "随机更换颜色 " + (i + 1));
+      rand.textContent = "⟳";
+      rand.addEventListener("click", () => {
+        state.colors[i] = randomColorNear();
+        picker.value = state.colors[i];
+        text.value = state.colors[i];
+        render();
+      });
+
+      item.append(picker, text, rand);
+      list.appendChild(item);
+    });
+  }
+
+  // ---------- 核心渲染 ----------
+  let noisePattern = null;
+
+  function makeNoiseCanvas(size) {
+    const c = document.createElement("canvas");
+    c.width = c.height = size;
+    const ctx = c.getContext("2d");
+    const img = ctx.createImageData(size, size);
+    const d = img.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const v = 108 + Math.random() * 84; // 中灰附近的单色噪点
+      d[i] = d[i + 1] = d[i + 2] = v;
+      d[i + 3] = 255;
+    }
+    ctx.putImageData(img, 0, 0);
+    return c;
+  }
+
+  function render() {
+    const W = state.renderW, H = state.renderH;
+    $("canvasMeta").textContent = W + " × " + H;
+    off.width = W; off.height = H;
+    const rng = mulberry32(state.seedLayout);
+
+    const p = {
+      blobCount: +$("blobCount").value,
+      blobSize: +$("blobSize").value,
+      sizeVar: +$("sizeVar").value,
+      soft: +$("soft").value,
+      focus: +$("focus").value,
+      alpha: +$("alpha").value,
+      speck: +$("speck").value,
+      speckSize: +$("speckSize").value,
+      grain: +$("grain").value,
+      bg: $("bgColor").value,
+    };
+
+    // 1. 纸面底色
+    octx.globalCompositeOperation = "source-over";
+    octx.filter = "none";
+    octx.globalAlpha = 1;
+    octx.fillStyle = p.bg;
+    octx.fillRect(0, 0, W, H);
+
+    const minDim = Math.min(W, H);
+    const baseR = minDim * p.blobSize;
+
+    // 2. 渐变团块：两层绘制 —— 远景更模糊，近景略实，形成虚实
+    const blobs = [];
+    for (let i = 0; i < p.blobCount; i++) {
+      const rScale = 1 - p.sizeVar / 2 + rng() * p.sizeVar;
+      blobs.push({
+        x: rng() * W,
+        y: rng() * H,
+        r: baseR * rScale * (0.7 + rng() * 0.6),
+        color: state.colors[Math.floor(rng() * state.colors.length)],
+        // depth 0=最远最虚 1=最近最实
+        depth: rng(),
+        alpha: p.alpha * (0.78 + rng() * 0.22),
+        squashX: 0.75 + rng() * 0.5,   // 轻微椭圆，避免全是正圆
+        squashY: 0.75 + rng() * 0.5,
+      });
+    }
+    blobs.sort((a, b) => a.depth - b.depth); // 远的先画
+
+    for (const b of blobs) {
+      // 模糊半径：小基础羽化保持饱和 + 由 depth 与 focus 决定的额外失焦
+      const blurPx = b.r * p.soft * 0.10
+        + b.r * p.focus * (1 - b.depth) * 0.38;
+      octx.save();
+      octx.translate(b.x, b.y);
+      octx.scale(b.squashX, b.squashY);
+      octx.filter = blurPx > 0.5 ? `blur(${blurPx.toFixed(1)}px)` : "none";
+      const g = octx.createRadialGradient(0, 0, 0, 0, 0, b.r);
+      const [r, gg, bb] = hexToRgb(b.color);
+      // 中心饱和、边缘柔和羽化，模拟喷漆/晕染
+      const coreStop = Math.max(0.1, 0.55 - p.soft * 0.3);
+      g.addColorStop(0, `rgba(${r},${gg},${bb},${b.alpha})`);
+      g.addColorStop(coreStop, `rgba(${r},${gg},${bb},${(b.alpha * 0.92).toFixed(3)})`);
+      g.addColorStop(1, `rgba(${r},${gg},${bb},0)`);
+      octx.fillStyle = g;
+      octx.beginPath();
+      octx.arc(0, 0, b.r, 0, Math.PI * 2);
+      octx.fill();
+      // 饱和核心层：更小、更实的喷漆沉积中心
+      octx.filter = "none";
+      const cr = b.r * (0.35 + (1 - p.soft) * 0.2);
+      const g2 = octx.createRadialGradient(0, 0, 0, 0, 0, cr);
+      g2.addColorStop(0, `rgba(${r},${gg},${bb},${(b.alpha * 0.55).toFixed(3)})`);
+      g2.addColorStop(1, `rgba(${r},${gg},${bb},0)`);
+      octx.fillStyle = g2;
+      octx.beginPath();
+      octx.arc(0, 0, cr, 0, Math.PI * 2);
+      octx.fill();
+      octx.restore();
+    }
+    octx.filter = "none";
+
+    // 3. 散点（喷漆颗粒）：围绕每个团块喷洒 + 全画面稀疏飞点
+    if (p.speck > 0) {
+      const perBlob = Math.round(130 * p.speck);
+      for (const b of blobs) {
+        const [r, gg, bb] = hexToRgb(b.color);
+        for (let i = 0; i < perBlob; i++) {
+          const ang = rng() * Math.PI * 2;
+          const dist = b.r * (0.3 + rng() * rng() * 1.2); // 越靠外越稀
+          const sx = b.x + Math.cos(ang) * dist * b.squashX;
+          const sy = b.y + Math.sin(ang) * dist * b.squashY;
+          const sr = (0.5 + rng() * rng() * 3) * p.speckSize;
+          octx.globalAlpha = (0.35 + rng() * 0.6) * (1 - Math.min(dist / (b.r * 1.6), 0.75));
+          octx.fillStyle = `rgb(${r},${gg},${bb})`;
+          octx.beginPath();
+          octx.arc(sx, sy, sr, 0, Math.PI * 2);
+          octx.fill();
+        }
+      }
+      // 全画面稀疏飞点
+      const globalSpecks = Math.round(260 * p.speck);
+      for (let i = 0; i < globalSpecks; i++) {
+        const c = state.colors[Math.floor(rng() * state.colors.length)];
+        const [r, gg, bb] = hexToRgb(c);
+        octx.globalAlpha = 0.2 + rng() * 0.55;
+        octx.fillStyle = `rgb(${r},${gg},${bb})`;
+        octx.beginPath();
+        octx.arc(rng() * W, rng() * H, (0.5 + rng() * 2.2) * p.speckSize, 0, Math.PI * 2);
+        octx.fill();
+      }
+      octx.globalAlpha = 1;
+    }
+
+    // 4. 噪点颗粒（胶片/纸面质感）
+    if (p.grain > 0) {
+      if (!noisePattern || noisePattern.width !== 256) noisePattern = makeNoiseCanvas(256);
+      const pat = octx.createPattern(noisePattern, "repeat");
+      octx.save();
+      octx.globalCompositeOperation = "overlay";
+      octx.globalAlpha = p.grain * 0.75;
+      octx.fillStyle = pat;
+      octx.fillRect(0, 0, W, H);
+      octx.globalCompositeOperation = "multiply";
+      octx.globalAlpha = p.grain * 0.12;
+      octx.fillStyle = pat;
+      octx.fillRect(0, 0, W, H);
+      octx.restore();
+    }
+
+    // 5. 轻微暗角，聚拢视线
+    const vg = octx.createRadialGradient(W / 2, H / 2, minDim * 0.45, W / 2, H / 2, Math.max(W, H) * 0.75);
+    vg.addColorStop(0, "rgba(0,0,0,0)");
+    vg.addColorStop(1, "rgba(60,40,20,0.14)");
+    octx.fillStyle = vg;
+    octx.fillRect(0, 0, W, H);
+
+    drawPreview();
+  }
+
+  // ---------- 预览适配 ----------
+  function drawPreview() {
+    const wrap = $("canvasWrap");
+    const stage = document.querySelector(".canvas-area");
+    const maxW = stage.clientWidth - 44;
+    const maxH = stage.clientHeight - 44;
+    const scale = Math.min(maxW / state.renderW, maxH / state.renderH, 1);
+    const vw = Math.max(1, Math.round(state.renderW * scale));
+    const vh = Math.max(1, Math.round(state.renderH * scale));
+    preview.width = vw;
+    preview.height = vh;
+    wrap.style.width = vw + "px";
+    wrap.style.height = vh + "px";
+    pctx.imageSmoothingEnabled = true;
+    pctx.imageSmoothingQuality = "high";
+    pctx.drawImage(off, 0, 0, vw, vh);
+  }
+
+  // ---------- 控件绑定 ----------
+  function bindSlider(id, valId, fmt) {
+    const el = $(id), val = $(valId);
+    const show = () => { val.textContent = fmt ? fmt(el.value) : el.value; };
+    el.addEventListener("input", () => { show(); render(); });
+    show();
+  }
+  const f2 = v => (+v).toFixed(2);
+  bindSlider("blobCount", "blobCountVal");
+  bindSlider("blobSize", "blobSizeVal", f2);
+  bindSlider("sizeVar", "sizeVarVal", f2);
+  bindSlider("soft", "softVal", f2);
+  bindSlider("focus", "focusVal", f2);
+  bindSlider("alpha", "alphaVal", f2);
+  bindSlider("speck", "speckVal", f2);
+  bindSlider("speckSize", "speckSizeVal", f2);
+  bindSlider("grain", "grainVal", f2);
+
+  $("colorCount").addEventListener("input", (e) => {
+    const n = +e.target.value;
+    $("colorCountVal").textContent = n;
+    while (state.colors.length < n) state.colors.push(randomColorNear());
+    state.colors.length = n;
+    rebuildColorList();
+    render();
+  });
+
+  $("bgColor").addEventListener("change", render);
+
+  $("preset").addEventListener("change", (e) => {
+    const [w, h] = e.target.value.split("x").map(Number);
+    state.renderW = w; state.renderH = h;
+    render();
+  });
+
+  $("btnRandom").addEventListener("click", () => {
+    state.seedLayout = (Math.random() * 1e9) | 0;
+    noisePattern = null;
+    render();
+  });
+
+  $("btnPalette").addEventListener("click", () => {
+    state.colors = randomPalette(state.colors.length);
+    rebuildColorList();
+    render();
+  });
+
+  $("btnShuffleOne").addEventListener("click", () => {
+    for (let i = state.colors.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [state.colors[i], state.colors[j]] = [state.colors[j], state.colors[i]];
+    }
+    rebuildColorList();
+    render();
+  });
+
+  $("btnDownload").addEventListener("click", () => {
+    const scale = +$("exportScale").value;
+    const baseW = state.renderW, baseH = state.renderH;
+    const btn = $("btnDownload");
+
+    const doExport = () => {
+      const a = document.createElement("a");
+      a.download = `gradient-${state.renderW}x${state.renderH}@${scale}x.png`;
+      a.href = off.toDataURL("image/png");
+      a.click();
+    };
+
+    if (scale === 1) {
+      doExport();
+      return;
+    }
+    // 高倍导出：以相同种子按倍率重新渲染，导出后恢复原尺寸
+    btn.textContent = "正在渲染高分辨率…";
+    btn.disabled = true;
+    setTimeout(() => {
+      state.renderW = baseW * scale;
+      state.renderH = baseH * scale;
+      render();
+      doExport();
+      state.renderW = baseW;
+      state.renderH = baseH;
+      render();
+      btn.textContent = "下载 PNG";
+      btn.disabled = false;
+    }, 30);
+  });
+
+  window.addEventListener("resize", drawPreview);
+
+  // ---------- 启动 ----------
+  rebuildColorList();
+  render();
+})();
+</script>
+</body>
+</html>

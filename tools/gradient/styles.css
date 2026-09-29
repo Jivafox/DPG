@@ -1,0 +1,60 @@
+:root{color-scheme:dark;--bg:oklch(0.145 0 0);--panel:oklch(0.205 0 0);--elevated:oklch(0.269 0 0);--line:oklch(1 0 0 / 10%);--text:oklch(0.985 0 0);--muted:oklch(0.708 0 0);--faint:oklch(0.556 0 0);--accent:#fff;--on-accent:oklch(0.205 0 0)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:default;opacity:.4}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* 布局与 ASCII Studio 一致：左侧固定参数面板 + 右侧开放预览区 */
+.app-shell{display:grid;grid-template-columns:minmax(320px,360px) minmax(0,1fr);min-height:100vh}
+.panel{height:100vh;overflow-y:auto;overscroll-behavior:contain;border-right:1px solid var(--line);background:var(--panel);padding:22px}
+
+.stage{display:grid;grid-template-rows:52px minmax(0,1fr);min-width:0;background:#000}
+.stage-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 18px;border-bottom:1px solid var(--line);color:var(--muted);font-size:12px}
+#canvasMeta{font-variant-numeric:tabular-nums}
+.canvas-area{display:grid;place-items:center;min-height:0;padding:22px;overflow:hidden}
+.canvas-wrap{line-height:0;border-radius:6px;overflow:hidden;box-shadow:0 0 0 1px var(--line)}
+canvas#preview{display:block}
+
+/* 面板内的紧凑标识块（与其他工具一致） */
+.brand{margin-bottom:8px}
+.brand .eyebrow{color:var(--muted);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.brand h1{font-size:24px;letter-spacing:-.3px;margin:8px 0 0;font-weight:600}
+.brand .intro{color:var(--muted);font-size:12px;line-height:1.6;margin:12px 0 0}
+
+.section{padding:18px 0;border-top:1px solid var(--line)}
+.section:first-of-type{border-top:0}
+.section-title{font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section-title::after{content:"";flex:1;height:1px;background:var(--line)}
+
+.row{margin-bottom:14px}
+.row label{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-bottom:6px}
+.row label .val{color:var(--text);font-variant-numeric:tabular-nums;font-size:12px}
+input[type=range]{width:100%;display:block;accent-color:var(--accent);cursor:pointer;margin:8px 0 4px}
+
+select{width:100%;height:38px;background:var(--elevated);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:0 28px 0 10px;font-size:13px;cursor:pointer}
+
+/* 颜色编辑器 */
+.color-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.color-item{display:flex;align-items:center;gap:8px;background:var(--elevated);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+.color-item input[type=color]{width:34px;height:34px;padding:2px;flex:none;border:1px solid var(--line);border-radius:6px;background:var(--panel);cursor:pointer}
+.color-item input[type=text]{flex:1;min-width:0;height:30px;background:transparent;border:none;color:var(--text);font:12px ui-monospace,monospace;text-transform:uppercase;padding:0 4px}
+.color-item .rand-one{flex:none;min-width:32px;min-height:32px;background:none;border:none;border-radius:6px;color:var(--muted);font-size:14px;line-height:1}
+.color-item .rand-one:hover{color:var(--accent);background:var(--panel)}
+
+/* 按钮 */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:36px;padding:0 12px;border-radius:8px;font-size:13px;font-weight:500;border:1px solid var(--line);background:var(--elevated);color:var(--text);transition:filter .15s ease-out}
+.btn:hover:not(:disabled){filter:brightness(1.12)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn-row{display:flex;gap:8px}
+.btn-row .btn{flex:1}
+
+.hint{font-size:12px;color:var(--faint);line-height:1.6;margin-top:8px}
+
+@media(max-width:860px){
+  .app-shell{grid-template-columns:1fr}
+  .stage{grid-row:1;min-height:280px;height:48vh;position:sticky;top:0;z-index:2;border-bottom:1px solid var(--line)}
+  .panel{height:auto;overflow:visible;border-right:0}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}

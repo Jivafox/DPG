@@ -11,7 +11,9 @@ const base = process.env.DPG_QA_SUBPATH_URL || 'http://127.0.0.1:4181/DPG/';
     page.on('response', r => { if (r.status() >= 400) failed.push(r.url()); });
     page.on('request', r => { if (/^https?:/.test(r.url()) && new URL(r.url()).origin !== new URL(base).origin) external.push(r.url()); });
     await page.goto(base);
-    assert.equal(await page.locator('.tool-card').count(), 3);
+    const catalog = await (await page.request.get(`${base}catalog.json`)).json();
+    await page.locator('.tool-card').first().waitFor();
+    assert.deepEqual(await page.locator('.tool-card').evaluateAll(cards => cards.map(card => card.dataset.tool)), catalog.tools.map(tool => tool.id));
     for (const slug of ['ascii-motion', 'wax-seal']) {
       await page.locator(`[data-tool="${slug}"]`).click();
       const ready = slug === 'ascii-motion' ? '#outputCanvas' : '#inscription';
@@ -65,6 +67,6 @@ const base = process.env.DPG_QA_SUBPATH_URL || 'http://127.0.0.1:4181/DPG/';
     await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});assert(Number(await touch.locator('#seal').getAttribute('data-progress'))>0);assert.equal(await touch.locator('#seal').getAttribute('data-state'),'paused');
     await mobile.close();
     assert.deepEqual(errors,[]);assert.deepEqual(failed,[]);assert.deepEqual(external,[]);
-    console.log(JSON.stringify({passed:true,checks:['three-tool catalog','iframe/refresh/back/standalone','SVG filtering/dedup/order/error','PNG','reduced motion','responsive widths','seal keyboard/touch/pause/reset/material'],errors,failed,external}));
+    console.log(JSON.stringify({passed:true,checks:['published catalog order','iframe/refresh/back/standalone','SVG filtering/dedup/order/error','PNG','reduced motion','responsive widths','seal keyboard/touch/pause/reset/material'],errors,failed,external}));
   } finally { await browser.close(); }
 })().catch(error => {console.error(error);process.exitCode=1;});

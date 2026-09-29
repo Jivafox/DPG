@@ -1,13 +1,13 @@
 :root {
   color-scheme: dark;
-  --bg: #0b0c0f;
-  --panel: #111318;
-  --panel-2: #191b21;
-  --line: #272a31;
-  --text: #f0f1f3;
-  --muted: #a0a3ad;
-  --accent: #1783FF;
-  --focus: #1783FF;
+  --bg: oklch(0.145 0 0);
+  --panel: oklch(0.205 0 0);
+  --panel-2: oklch(0.269 0 0);
+  --line: oklch(1 0 0 / 10%);
+  --text: oklch(0.985 0 0);
+  --muted: oklch(0.708 0 0);
+  --accent: #fff;
+  --focus: #fff;
 }
 
 * {
@@ -33,15 +33,15 @@ select {
 button {
   min-height: 38px;
   border: 1px solid var(--line);
-  border-radius: 7px;
-  background: #202020;
+  border-radius: 8px;
+  background: oklch(0.269 0 0);
   color: var(--text);
   cursor: pointer;
 }
 
 button:hover:not(:disabled) {
-  background: #2a2a2a;
-  border-color: #4a4a4a;
+  background: oklch(0.32 0 0);
+  border-color: oklch(1 0 0 / 15%);
 }
 
 button:disabled {
@@ -50,7 +50,7 @@ button:disabled {
 }
 
 button.secondary {
-  background: #121212;
+  background: oklch(0.145 0 0);
   color: var(--muted);
 }
 
@@ -120,7 +120,7 @@ h2 {
   min-height: 92px;
   margin-top: 12px;
   padding: 16px;
-  border: 1px dashed #474747;
+  border: 1px dashed oklch(1 0 0 / 15%);
   border-radius: 8px;
   background: var(--panel-2);
   cursor: pointer;
@@ -132,7 +132,7 @@ h2 {
 
 .drop-zone.is-dragging {
   border-color: var(--focus);
-  background: #16222a;
+  background: oklch(1 0 0 / 8%);
   color: #ffffff;
 }
 
@@ -171,9 +171,9 @@ h2 {
   min-height: 38px;
   border: 1px solid var(--line);
   border-radius: 7px;
-  background: #0b0b0b;
+  background: oklch(0.145 0 0);
   color: var(--text);
-  padding: 0 10px;
+  padding: 0 28px 0 10px;
 }
 
 .field input[type="color"] {
@@ -181,7 +181,7 @@ h2 {
   height: 38px;
   border: 1px solid var(--line);
   border-radius: 7px;
-  background: #0b0b0b;
+  background: oklch(0.145 0 0);
   padding: 4px;
 }
 
@@ -256,7 +256,7 @@ h2 {
   height: 34px;
   border: 1px solid var(--line);
   border-radius: 7px;
-  background: #0c0c0c;
+  background: oklch(0.145 0 0);
   color: var(--text);
   font-size: 13px;
   overflow: hidden;
@@ -352,11 +352,11 @@ input[type="range"] {
   overflow: hidden;
   border: 0;
   border-radius: 999px;
-  background: #202020;
+  background: oklch(0.269 0 0);
 }
 
 .export-progress::-webkit-progress-bar {
-  background: #202020;
+  background: oklch(0.269 0 0);
 }
 
 .export-progress::-webkit-progress-value {
@@ -425,8 +425,9 @@ input[type="range"] {
 body { font-size: 14px; }
 h1 { font-size: 24px; margin-top: 8px; }
 .intro { color: var(--muted); line-height: 1.6; margin: 12px 0 0; }
-button, .field input, .field select { border-radius: 6px; }
-button:hover:not(:disabled) { background: #202229; }
+button { border-radius: 8px; }
+.field input, .field select { border-radius: 6px; }
+button:hover:not(:disabled) { background: oklch(0.32 0 0); }
 :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 .drop-zone:focus-within { outline: 2px solid var(--focus); outline-offset: 3px; }
 .empty-hint { position: absolute; color: var(--muted); text-align: center; padding: 24px; pointer-events: none; }

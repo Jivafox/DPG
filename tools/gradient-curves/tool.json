@@ -1,0 +1,13 @@
+{
+  "id": "gradient-curves",
+  "name": "Gradient II",
+  "description": "拖动两条贝塞尔曲线塑造渐变场，叠加噪点、闪粉与图案质感，导出高分辨率 PNG / WebP。",
+  "tags": ["渐变", "曲线", "生成"],
+  "entry": "index.html",
+  "version": "1.0.0",
+  "created": "2026-09-29",
+  "updated": "2026-09-29",
+  "status": "published",
+  "cover": "assets/cover.png",
+  "capabilities": ["clipboard", "download"]
+}

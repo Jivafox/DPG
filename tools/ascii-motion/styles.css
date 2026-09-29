@@ -1,14 +1,14 @@
 :root {
   color-scheme: dark;
-  --bg: #0b0c0f;
-  --panel: #111318;
-  --panel-2: #191b21;
-  --line: #272a31;
-  --line-strong: #484848;
-  --text: #f0f1f3;
-  --muted: #a0a3ad;
-  --accent: #1783FF;
-  --focus: #1783FF;
+  --bg: oklch(0.145 0 0);
+  --panel: oklch(0.205 0 0);
+  --panel-2: oklch(0.269 0 0);
+  --line: oklch(1 0 0 / 10%);
+  --line-strong: oklch(1 0 0 / 15%);
+  --text: oklch(0.985 0 0);
+  --muted: oklch(0.708 0 0);
+  --accent: #fff;
+  --focus: #fff;
   --danger: #ff8e8e;
 }
 
@@ -37,19 +37,19 @@ input[type="number"] {
   min-height: 38px;
   border: 1px solid var(--line);
   border-radius: 7px;
-  background: #0b0b0b;
+  background: oklch(0.145 0 0);
   color: var(--text);
 }
 
 button {
   padding: 0 12px;
-  background: #202020;
+  background: oklch(0.269 0 0);
   cursor: pointer;
 }
 
 button:hover:not(:disabled) {
   border-color: var(--line-strong);
-  background: #2a2a2a;
+  background: oklch(0.32 0 0);
 }
 
 button:focus-visible,
@@ -68,7 +68,7 @@ select:disabled {
 }
 
 button.secondary {
-  background: #121212;
+  background: oklch(0.145 0 0);
   color: var(--muted);
 }
 
@@ -84,7 +84,7 @@ button.secondary {
   border-right: 1px solid var(--line);
   background: var(--panel);
   padding: 22px;
-  scrollbar-color: #424242 transparent;
+  scrollbar-color: oklch(0.32 0 0) transparent;
 }
 
 .brand {
@@ -163,7 +163,7 @@ h2 {
   min-height: 88px;
   margin-top: 12px;
   padding: 15px;
-  border: 1px dashed #474747;
+  border: 1px dashed oklch(1 0 0 / 15%);
   border-radius: 8px;
   background: var(--panel-2);
   cursor: pointer;
@@ -172,7 +172,7 @@ h2 {
 
 .drop-zone.is-dragging {
   border-color: var(--focus);
-  background: #16222a;
+  background: oklch(1 0 0 / 8%);
   color: #fff;
 }
 
@@ -208,7 +208,7 @@ h2 {
 .field input[type="number"],
 .field select {
   width: 100%;
-  padding: 0 10px;
+  padding: 0 28px 0 10px;
 }
 
 .field input[type="color"] {
@@ -216,7 +216,7 @@ h2 {
   height: 38px;
   border: 1px solid var(--line);
   border-radius: 7px;
-  background: #0b0b0b;
+  background: oklch(0.145 0 0);
   padding: 4px;
 }
 
@@ -282,7 +282,7 @@ h2 {
   margin-top: 14px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #0c0c0c;
+  background: oklch(0.145 0 0);
 }
 
 .parameter-block summary {
@@ -313,7 +313,7 @@ h2 {
   gap: 8px;
   align-items: center;
   margin-top: 13px;
-  color: #777;
+  color: oklch(0.556 0 0);
   font-size: 10px;
 }
 
@@ -338,7 +338,7 @@ h2 {
   height: 38px;
   border: 1px solid var(--line);
   border-radius: 7px;
-  background: #0c0c0c;
+  background: oklch(0.145 0 0);
   color: var(--text);
   font-size: 12px;
   overflow: hidden;
@@ -365,7 +365,7 @@ h2 {
   display: grid;
   place-items: center;
   height: 100%;
-  color: #555;
+  color: oklch(0.556 0 0);
   font-size: 10px;
   letter-spacing: -2px;
 }
@@ -491,11 +491,11 @@ input[type="range"] {
   overflow: hidden;
   border: 0;
   border-radius: 999px;
-  background: #202020;
+  background: oklch(0.269 0 0);
 }
 
 .export-progress::-webkit-progress-bar {
-  background: #202020;
+  background: oklch(0.269 0 0);
 }
 
 .export-progress::-webkit-progress-value,
@@ -607,10 +607,12 @@ h1 {font-size:24px;line-height:1.2;margin:6px 0 10px;letter-spacing:-.6px}
 .stage,.canvas-wrap {background:var(--bg)}
 .panel {padding:24px;height:100%;min-height:0}
 .stage {min-height:0}
-button,select,input[type=text],input[type=number] {border-radius:6px;min-height:36px;background:var(--panel-2)}
-button:hover:not(:disabled) {background:#202229}
-[data-export-png="1"],#exportVideo {background:var(--accent);border-color:var(--accent);color:#fff}
-[data-export-png="1"]:hover:not(:disabled),#exportVideo:hover:not(:disabled) {background:#0972eb}
+button,select,input[type=text],input[type=number] {min-height:36px;background:var(--panel-2)}
+button {border-radius:8px}
+select,input[type=text],input[type=number] {border-radius:6px}
+button:hover:not(:disabled) {background:oklch(0.32 0 0)}
+[data-export-png="1"],#exportVideo {background:var(--accent);border-color:var(--accent);color:oklch(0.205 0 0)}
+[data-export-png="1"]:hover:not(:disabled),#exportVideo:hover:not(:disabled) {background:oklch(0.87 0 0)}
 .drop-zone:focus-within {outline:2px solid var(--focus);outline-offset:2px}
 .drop-zone input {pointer-events:auto}
 .three-colors {grid-template-columns:1fr}

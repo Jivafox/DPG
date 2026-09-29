@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gradient II · DPG</title>
+<link rel="stylesheet" href="./styles.css">
+<script src="./app.js" defer></script>
+</head>
+<body>
+<main class="app-shell">
+  <aside class="panel" aria-label="生成参数">
+    <div class="brand">
+      <p class="eyebrow">DPG / 05</p>
+      <h1>Gradient II</h1>
+      <p class="intro">拖动两条贝塞尔曲线塑造渐变场，叠加噪点、闪粉与图案质感，导出高分辨率 PNG / WebP。</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">生成 Generate</div>
+      <div class="btn-row">
+        <button class="btn" id="btnRandomAll">随机全部</button>
+        <button class="btn" id="btnTemplates">模板 Templates</button>
+      </div>
+      <div class="row two-col">
+        <div>
+          <label for="resolution">导出倍率</label>
+          <select id="resolution">
+            <option value="1">1x</option>
+            <option value="2">2x</option>
+            <option value="3">3x</option>
+            <option value="4">4x</option>
+          </select>
+        </div>
+        <div>
+          <label for="format">导出格式</label>
+          <select id="format">
+            <option value="PNG">PNG</option>
+            <option value="WebP">WebP</option>
+          </select>
+        </div>
+      </div>
+      <div class="btn-row" style="margin-bottom:0">
+        <button class="btn" id="btnShare">分享链接</button>
+        <button class="btn btn-primary" id="btnExport">导出 PNG</button>
+      </div>
+      <input id="shareUrl" class="share-url" type="text" readonly hidden aria-label="分享链接地址">
+      <div class="hint">“分享链接”会把当前全部参数编码进网址并复制到剪贴板；“随机全部”重掷配色、曲线与混合方式。</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">曲线 Curves</div>
+      <div class="seg" role="group" aria-label="当前编辑的曲线">
+        <button type="button" id="segX" class="active">X 曲线 · 横向</button>
+        <button type="button" id="segY">Y 曲线 · 纵向</button>
+      </div>
+      <div class="switch-row"><span>反相 Invert</span><button type="button" class="switch" id="swInvert" role="switch" aria-checked="false" aria-label="反相"><span class="knob"></span></button></div>
+      <div class="switch-row"><span>平滑 Smoothing</span><button type="button" class="switch" id="swSmoothing" role="switch" aria-checked="true" aria-label="平滑"><span class="knob"></span></button></div>
+      <div class="switch-row"><span>显示曲线 Curves visible</span><button type="button" class="switch" id="swVisible" role="switch" aria-checked="true" aria-label="显示曲线"><span class="knob"></span></button></div>
+      <button class="btn" id="btnRandomCurves">随机曲线</button>
+      <div class="hint">在画布上拖动 8 个控制点塑造渐变场；实线为当前曲线，虚线为另一条。</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">画布 Canvas</div>
+      <div class="row two-col">
+        <div>
+          <label for="widthIn">宽度 Width</label>
+          <input type="number" class="num-field" id="widthIn" min="16" max="8192" step="1">
+        </div>
+        <div>
+          <label for="heightIn">高度 Height</label>
+          <input type="number" class="num-field" id="heightIn" min="16" max="8192" step="1">
+        </div>
+      </div>
+      <div class="row">
+        <label for="globalBlend">全局混合 Global blend</label>
+        <select id="globalBlend"></select>
+      </div>
+      <div id="canvasSliders"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">颜色 Colors</div>
+      <div class="color-strip" id="colorStrip" title="双击添加颜色"></div>
+      <div class="icon-row">
+        <button type="button" class="icon-btn" id="btnReverse" title="反转颜色顺序" aria-label="反转颜色顺序">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>
+        </button>
+        <button type="button" class="icon-btn" id="btnEven" title="等距分布" aria-label="等距分布">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4v16"/><path d="M12 4v16"/><path d="M19 4v16"/></svg>
+        </button>
+        <button type="button" class="icon-btn" id="btnShuffle" title="随机打乱顺序" aria-label="随机打乱顺序">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.2" cy="8.2" r="1.3" fill="currentColor" stroke="none"/><circle cx="15.8" cy="8.2" r="1.3" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/><circle cx="8.2" cy="15.8" r="1.3" fill="currentColor" stroke="none"/><circle cx="15.8" cy="15.8" r="1.3" fill="currentColor" stroke="none"/></svg>
+        </button>
+        <span class="spacer"></span>
+        <button type="button" class="icon-btn danger" id="btnDelete" title="删除选中颜色" aria-label="删除选中颜色">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+        </button>
+      </div>
+      <div class="picker-row">
+        <input type="color" id="colorPicker" aria-label="选中颜色">
+        <input type="text" class="hex-input" id="colorHex" spellcheck="false" aria-label="选中颜色 HEX 色值">
+      </div>
+      <div class="row">
+        <label for="colorTemplate">配色模板 Palette</label>
+        <select id="colorTemplate"></select>
+      </div>
+      <div class="btn-row">
+        <button class="btn" id="btnRandomColors">随机配色</button>
+      </div>
+      <div id="colorSliders"></div>
+      <div class="hint">拖动色标改变位置，双击色条添加颜色（2–10 个），点选后可精确改色或删除。</div>
+    </div>
+
+    <div id="panelDyn"></div>
+  </aside>
+
+  <section class="stage" aria-label="渐变预览">
+    <div class="stage-toolbar"><span>预览</span><span id="canvasMeta">1460 × 910</span></div>
+    <div class="canvas-area" id="canvasArea">
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="preview"></canvas>
+        <svg id="curveOverlay" aria-hidden="true"></svg>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="modal" id="tplModal" hidden>
+  <div class="modal-backdrop" id="tplBackdrop"></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-label="精选模板">
+    <div class="modal-head">
+      <h2>精选模板 Templates</h2>
+      <button type="button" class="icon-btn" id="tplClose" title="关闭" aria-label="关闭">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <div class="tpl-grid" id="tplGrid"></div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -2,27 +2,35 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Wax Seal · DPG</title>
+<title>Seal · DPG</title>
 <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-<header><span class="brand">DPG / 03</span><span class="edition">交互实验</span></header>
-<main><div class="eyebrow">WAX SEAL</div><h1>Wax Seal</h1><p class="intro">输入文字，持续按压生成一枚火漆印章。</p>
-<div class="field"><label for="inscription">印章内容</label><div class="input-wrap"><input id="inscription" autocomplete="off" placeholder="输入文字，开始制印" aria-describedby="status" maxlength="24"><span class="count">0 / 12</span></div></div>
-<div class="workbench"><section class="preview" aria-label="火漆预览"><div class="stage"><button class="seal-button" id="seal" aria-label="持续悬停或长按火漆印；键盘按住空格，松开暂停" aria-disabled="true"><canvas id="wax" width="520" height="520" aria-hidden="true"></canvas></button></div>
-<div class="status" id="status" role="status" aria-live="polite"><span class="dot"></span><span id="message">先写下文字，再唤醒这枚火漆</span></div>
-<div class="pressure" aria-hidden="true"><span id="pressure-fill"></span></div>
-<div class="actions"><button id="reset" disabled>↻ &nbsp; 重新融蜡</button></div>
+<main class="app-shell">
+<aside class="panel" aria-label="印章参数">
+<div class="brand"><p class="eyebrow">DPG / 03</p><h1>Seal</h1><p class="intro">输入文字，持续按压生成一枚火漆印章。</p></div>
+<section class="control-group">
+<label class="group-title" for="inscription">印章内容</label>
+<div class="input-wrap"><input id="inscription" autocomplete="off" placeholder="输入文字，开始制印" aria-describedby="status" maxlength="24"><span class="count">0 / 12</span></div>
 </section>
-<aside class="material-panel" aria-labelledby="material-title">
+<section class="control-group material-panel" aria-labelledby="material-title">
 <div class="panel-heading"><h2 id="material-title">调配你的火漆</h2><button type="button" id="material-reset">恢复默认</button></div>
 <p class="panel-note">实时预览，保留当前按压进度</p>
 <div class="material-control"><label for="wax-color">蜡色</label><div class="color-row"><input type="color" id="wax-color" value="#852520" aria-label="选择蜡色"><input type="text" id="wax-hex" value="#852520" aria-label="蜡色 HEX 色值" maxlength="7" spellcheck="false"><span class="color-preview-label">自定义</span></div><span id="color-error" role="status"></span></div>
 <div class="material-control"><label for="contrast">明暗对比 <output id="contrast-value" for="contrast">100%</output></label><input type="range" id="contrast" min="50" max="180" value="100"><div class="range-captions"><span>柔和</span><span>鲜明</span></div></div>
 <div class="material-control"><label for="gloss">表面光泽 <output id="gloss-value" for="gloss">55%</output></label><input type="range" id="gloss" min="0" max="100" value="55"><div class="range-captions"><span>哑光</span><span>高光</span></div></div>
 <div class="material-control grain-control"><label class="grain-label" for="grain-enabled">磨砂颗粒 <input type="checkbox" id="grain-enabled" role="switch"></label><div class="grain-amount"><label for="grain">颗粒强度 <output id="grain-value" for="grain">40%</output></label><input type="range" id="grain" min="0" max="100" value="40" disabled><div class="range-captions"><span>细腻</span><span>粗粝</span></div></div></div>
-</aside></div>
-<footer><span class="step"><b>01</b> 写下文字</span><span class="step"><b>02</b> 悬停、长按或按住空格</span><span class="step"><b>03</b> 留下独一无二的印记</span></footer>
+</section>
+<section class="control-group">
+<h2 class="group-title">步骤</h2>
+<p class="panel-note steps"><span><b>01</b> 写下文字</span><span><b>02</b> 悬停、长按或按住空格</span><span><b>03</b> 留下独一无二的印记</span></p>
+</section>
+</aside>
+<section class="stage" aria-label="火漆预览">
+<div class="stage-toolbar"><span>预览</span><div class="status" id="status" role="status" aria-live="polite"><span class="dot"></span><span id="message">先写下文字，再唤醒这枚火漆</span></div></div>
+<div class="seal-area"><button class="seal-button" id="seal" aria-label="持续悬停或长按火漆印；键盘按住空格，松开暂停" aria-disabled="true"><canvas id="wax" width="520" height="520" aria-hidden="true"></canvas></button></div>
+<div class="stage-footer"><div class="pressure" aria-hidden="true"><span id="pressure-fill"></span></div><button id="reset" disabled>↻ &nbsp; 重新融蜡</button></div>
+</section>
 </main>
 <script>
 // A descending die clips the wax surface. Displaced wax flows outward and
