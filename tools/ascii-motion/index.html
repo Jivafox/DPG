@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ASCII Studio 2.0 · DPG</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="panel">
+        <div class="brand"><div><p class="eyebrow">DPG / 02</p><h1>ASCII Studio 2.0</h1><p class="brand-subtitle">动态渐变生成字符画。所有处理均在本机完成。</p></div></div>
+
+        <section class="control-group">
+          <div class="section-heading">
+            <h2>渐变 素材</h2>
+            <div class="animation-actions">
+              <button id="playToggle" class="mini-button" type="button" title="暂停动画" aria-label="暂停动画">Ⅱ</button>
+              <button id="restartAnimation" class="mini-button" type="button" title="从头播放" aria-label="从头播放">↺</button>
+            </div>
+          </div>
+          <p class="section-note">无论是否显示，渐变 都会持续作为字符采样源。</p>
+          <div class="color-grid three-colors">
+            <label class="field">
+              <span>颜色一</span>
+              <div class="color-control compact">
+                <input id="gradientColor1" type="color" value="#48ff28" />
+                <input id="gradientColor1Hex" type="text" value="#48FF28" spellcheck="false" />
+              </div>
+            </label>
+            <label class="field">
+              <span>颜色二</span>
+              <div class="color-control compact">
+                <input id="gradientColor2" type="color" value="#2c3d32" />
+                <input id="gradientColor2Hex" type="text" value="#2C3D32" spellcheck="false" />
+              </div>
+            </label>
+            <label class="field">
+              <span>颜色三</span>
+              <div class="color-control compact">
+                <input id="gradientColor3" type="color" value="#65a865" />
+                <input id="gradientColor3Hex" type="text" value="#65A865" spellcheck="false" />
+              </div>
+            </label>
+          </div>
+          <details class="parameter-block" open>
+            <summary>渐变 参数</summary>
+            <div id="gradientSliders" class="sliders"></div>
+          </details>
+        </section>
+
+        <section class="control-group">
+          <h2>字符与图形</h2>
+          <label class="drop-zone" id="glyphDropZone">
+            <input id="glyphUpload" type="file" accept=".svg,image/svg+xml" multiple />
+            <span>上传 SVG 字符</span>
+            <small>每个文件只载入一次；拖动或使用左右按钮调整亮暗映射</small>
+          </label>
+          <label class="field">
+            <span>默认字符</span>
+            <input id="textGlyphs" type="text" value="01" spellcheck="false" />
+          </label>
+          <label class="field">
+            <span>字符字体</span>
+            <select id="textFont">
+              <option value="monospace" selected>Monospace</option>
+              <option value="Arial, Helvetica, sans-serif">Arial</option>
+              <option value="'Helvetica Neue', Helvetica, Arial, sans-serif">Helvetica Neue</option>
+              <option value="Georgia, serif">Georgia</option>
+              <option value="'Times New Roman', Times, serif">Times New Roman</option>
+              <option value="'Courier New', Courier, monospace">Courier New</option>
+              <option value="'Trebuchet MS', Arial, sans-serif">Trebuchet MS</option>
+              <option value="Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif">Impact</option>
+              <option value="Lora, serif">Lora （本机字体）</option>
+              <option value="Geist Mono, monospace">Geist Mono （本机字体）</option>
+              <option value="Geist Pixel, monospace">Geist Pixel （本机字体）</option>
+            </select>
+          </label>
+          <div class="mapping-label" aria-hidden="true"><span>较亮</span><span>→</span><span>较暗</span></div>
+          <div id="glyphList" class="glyph-list" aria-live="polite"></div>
+          <div class="two-column-fields">
+            <label class="field">
+              <span>字符颜色</span>
+              <div class="color-control">
+                <input id="fgColor" type="color" value="#ffffff" />
+                <input id="fgColorHex" type="text" value="#FFFFFF" spellcheck="false" />
+              </div>
+            </label>
+            <label class="field">
+              <span>混合模式</span>
+              <select id="blendMode">
+                <option value="source-over" selected>Normal</option>
+                <option value="multiply">Multiply</option>
+                <option value="screen">Screen</option>
+                <option value="overlay">Overlay</option>
+                <option value="darken">Darken</option>
+                <option value="lighten">Lighten</option>
+                <option value="color-dodge">Color Dodge</option>
+                <option value="color-burn">Color Burn</option>
+                <option value="hard-light">Hard Light</option>
+                <option value="soft-light">Soft Light</option>
+                <option value="difference">Difference</option>
+                <option value="exclusion">Exclusion</option>
+              </select>
+            </label>
+          </div>
+          <div class="slider-row standalone-slider">
+            <label>
+              <span>字符透明度</span>
+              <input id="glyphOpacity" type="range" min="0" max="100" value="100" step="1" />
+            </label>
+            <output id="glyphOpacityValue">100%</output>
+          </div>
+          <label class="toggle-field">
+            <input id="revertTone" type="checkbox" />
+            <span>反向明暗采样</span>
+          </label>
+        </section>
+
+        <section class="control-group">
+          <h2>背景与画幅</h2>
+          <div class="two-column-fields">
+            <label class="field">
+              <span>背景模式</span>
+              <select id="backgroundMode">
+                <option value="gradient" selected>渐变</option>
+                <option value="solid">纯色</option>
+                <option value="transparent">透明</option>
+              </select>
+            </label>
+            <label class="field" id="bgColorField">
+              <span>纯色背景</span>
+              <div class="color-control">
+                <input id="bgColor" type="color" value="#000000" />
+                <input id="bgColorHex" type="text" value="#000000" spellcheck="false" />
+              </div>
+            </label>
+          </div>
+          <label class="field">
+            <span>画幅预设</span>
+            <select id="framePreset">
+              <option value="1920x1080" selected>1920 × 1080 · 16:9</option>
+              <option value="1080x1920">1080 × 1920 · 9:16</option>
+              <option value="1080x1080">1080 × 1080 · 1:1</option>
+              <option value="1200x628">1200 × 628 · 横向卡片</option>
+              <option value="2560x1440">2560 × 1440 · 2K</option>
+              <option value="custom">自定义</option>
+            </select>
+          </label>
+          <div class="dimension-row">
+            <label class="field">
+              <span>宽度</span>
+              <input id="frameWidth" type="number" min="256" max="4096" value="1920" step="1" />
+            </label>
+            <span class="dimension-times">×</span>
+            <label class="field">
+              <span>高度</span>
+              <input id="frameHeight" type="number" min="256" max="4096" value="1080" step="1" />
+            </label>
+          </div>
+          <label class="toggle-field">
+            <input id="lockAspect" type="checkbox" checked />
+            <span>锁定当前宽高比</span>
+          </label>
+          <p id="performanceNote" class="status-text performance-note"></p>
+        </section>
+
+        <section class="control-group">
+          <h2>ASCII 参数</h2>
+          <div id="asciiSliders" class="sliders"></div>
+        </section>
+
+        <section class="control-group">
+          <h2>最终杂色</h2>
+          <p class="section-note">位于字符之上的最终合成层，不参与 渐变 亮度采样。</p>
+          <label class="field">
+            <span>杂色混合模式</span>
+            <select id="grainBlendMode">
+              <option value="soft-light" selected>Soft Light</option>
+              <option value="overlay">Overlay</option>
+              <option value="source-over">Normal</option>
+              <option value="multiply">Multiply · 暗色</option>
+              <option value="screen">Screen · 亮色</option>
+            </select>
+          </label>
+          <div id="grainSliders" class="sliders"></div>
+          <label class="toggle-field">
+            <input id="grainAnimated" type="checkbox" />
+            <span>动态颗粒</span>
+          </label>
+        </section>
+
+        <section class="control-group">
+          <h2>导出</h2>
+          <div class="export-grid">
+            <button data-export-png="1" type="button">PNG 1x</button>
+            <button data-export-png="2" type="button">PNG 2x</button>
+            <button data-export-png="4" type="button">PNG 4x</button>
+          </div>
+          <div class="video-export-row">
+            <label class="field">
+              <span>视频时长</span>
+              <select id="videoDuration">
+                <option value="5" selected>5 秒</option>
+                <option value="10">10 秒</option>
+              </select>
+            </label>
+            <button id="exportVideo" type="button">导出视频</button>
+          </div>
+          <button id="resetAll" class="wide secondary reset-button" type="button">重置全部参数</button>
+          <progress id="exportProgress" class="export-progress" value="0" max="100" hidden></progress>
+          <p role="status" aria-live="polite" id="exportStatus" class="status-text">PNG 导出当前帧；视频始终从动画 0 秒开始。</p>
+        </section>
+      <p class="section-note"><a href="./assets/NOTICE.txt">第三方许可</a></p></aside>
+
+      <section class="stage">
+        <div class="stage-toolbar">
+          <span id="stageTitle">实时预览</span>
+          <span id="canvasMeta">1920 × 1080</span>
+        </div>
+        <div class="canvas-wrap" id="canvasWrap">
+          <canvas id="outputCanvas"></canvas>
+        </div>
+      </section>
+    </main>
+
+    <canvas id="sourceCanvas" hidden></canvas>
+    <canvas id="gradientCanvas" hidden></canvas>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

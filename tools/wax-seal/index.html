@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wax Seal · DPG</title>
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<header><span class="brand">DPG / 03</span><span class="edition">交互实验</span></header>
+<main><div class="eyebrow">WAX SEAL</div><h1>Wax Seal</h1><p class="intro">输入文字，持续按压生成一枚火漆印章。</p>
+<div class="field"><label for="inscription">印章内容</label><div class="input-wrap"><input id="inscription" autocomplete="off" placeholder="输入文字，开始制印" aria-describedby="status" maxlength="24"><span class="count">0 / 12</span></div></div>
+<div class="workbench"><section class="preview" aria-label="火漆预览"><div class="stage"><button class="seal-button" id="seal" aria-label="持续悬停或长按火漆印；键盘按住空格，松开暂停" aria-disabled="true"><canvas id="wax" width="520" height="520" aria-hidden="true"></canvas></button></div>
+<div class="status" id="status" role="status" aria-live="polite"><span class="dot"></span><span id="message">先写下文字，再唤醒这枚火漆</span></div>
+<div class="pressure" aria-hidden="true"><span id="pressure-fill"></span></div>
+<div class="actions"><button id="reset" disabled>↻ &nbsp; 重新融蜡</button></div>
+</section>
+<aside class="material-panel" aria-labelledby="material-title">
+<div class="panel-heading"><h2 id="material-title">调配你的火漆</h2><button type="button" id="material-reset">恢复默认</button></div>
+<p class="panel-note">实时预览，保留当前按压进度</p>
+<div class="material-control"><label for="wax-color">蜡色</label><div class="color-row"><input type="color" id="wax-color" value="#852520" aria-label="选择蜡色"><input type="text" id="wax-hex" value="#852520" aria-label="蜡色 HEX 色值" maxlength="7" spellcheck="false"><span class="color-preview-label">自定义</span></div><span id="color-error" role="status"></span></div>
+<div class="material-control"><label for="contrast">明暗对比 <output id="contrast-value" for="contrast">100%</output></label><input type="range" id="contrast" min="50" max="180" value="100"><div class="range-captions"><span>柔和</span><span>鲜明</span></div></div>
+<div class="material-control"><label for="gloss">表面光泽 <output id="gloss-value" for="gloss">55%</output></label><input type="range" id="gloss" min="0" max="100" value="55"><div class="range-captions"><span>哑光</span><span>高光</span></div></div>
+<div class="material-control grain-control"><label class="grain-label" for="grain-enabled">磨砂颗粒 <input type="checkbox" id="grain-enabled" role="switch"></label><div class="grain-amount"><label for="grain">颗粒强度 <output id="grain-value" for="grain">40%</output></label><input type="range" id="grain" min="0" max="100" value="40" disabled><div class="range-captions"><span>细腻</span><span>粗粝</span></div></div></div>
+</aside></div>
+<footer><span class="step"><b>01</b> 写下文字</span><span class="step"><b>02</b> 悬停、长按或按住空格</span><span class="step"><b>03</b> 留下独一无二的印记</span></footer>
+</main>
+<script>
+// A descending die clips the wax surface. Displaced wax flows outward and
+// accumulates at the rim; lettering appears only where the die contacts wax.
+const canvas=document.querySelector('#wax'),ctx=canvas.getContext('2d');
+const input=document.querySelector('#inscription'),seal=document.querySelector('#seal'),reset=document.querySelector('#reset'),message=document.querySelector('#message'),status=document.querySelector('#status');
+const N=520,C=N/2,total=N*N,radii=new Float32Array(total),angles=new Float32Array(total),waves=new Float32Array(total),engraving=new Float32Array(total),heights=new Float32Array(total),noise=new Float32Array(total),rgba=ctx.createImageData(N,N);
+const mask=document.createElement('canvas');mask.width=mask.height=N;const mc=mask.getContext('2d',{willReadFrequently:true});
+let state='empty',progress=0,elapsed=0,raf=0,composing=false,lastTime=0;
+const PRESS_DURATION=6200; // Accumulated hover/hold time; pauses never advance it.
+// One second now reaches the former two-second deformation, then eases out.
+const PRESS_EASE=Math.log(1-2000/PRESS_DURATION)/Math.log(1-1000/PRESS_DURATION);
+function pressureAt(elapsedMs){
+ const t=Math.max(0,Math.min(1,elapsedMs/PRESS_DURATION));
+ return 1-Math.pow(1-t,PRESS_EASE);
+}
+const material={color:'#852520',rgb:[133,37,32],contrast:1,gloss:.55,grainEnabled:false,grain:.4};
+const colorInput=document.querySelector('#wax-color'),hexInput=document.querySelector('#wax-hex');
+let materialFrame=0;
+function updateMaterial(){
+ material.color=colorInput.value;material.rgb=material.color.slice(1).match(/../g).map(v=>parseInt(v,16));
+ for(const key of ['contrast','gloss','grain']){
+ const control=document.querySelector('#'+key);material[key]=Number(control.value)/100;
+ document.querySelector('#'+key+'-value').textContent=control.value+'%';
+ }
+ material.grainEnabled=document.querySelector('#grain-enabled').checked;
+ document.querySelector('#grain').disabled=!material.grainEnabled;
+ // Only repaint material: never rebuild geometry or reset the interaction clock.
+ cancelAnimationFrame(materialFrame);
+ materialFrame=requestAnimationFrame(()=>render(reduced.matches&&progress<1?0:progress));
+}
+colorInput.addEventListener('input',()=>{hexInput.value=colorInput.value.toUpperCase();hexInput.removeAttribute('aria-invalid');document.querySelector('#color-error').textContent='';updateMaterial();});
+hexInput.addEventListener('input',()=>{
+ const value=hexInput.value.trim();
+ if(!/^#?[0-9a-f]{6}$/i.test(value)){hexInput.setAttribute('aria-invalid','true');document.querySelector('#color-error').textContent='请输入 6 位 HEX 色值';return;}
+ colorInput.value='#'+value.replace('#','');hexInput.removeAttribute('aria-invalid');document.querySelector('#color-error').textContent='';updateMaterial();
+});
+for(const key of ['contrast','gloss','grain','grain-enabled'])document.querySelector('#'+key).addEventListener('input',updateMaterial);
+document.querySelector('#material-reset').addEventListener('click',()=>{
+ colorInput.value='#852520';hexInput.value='#852520';hexInput.removeAttribute('aria-invalid');document.querySelector('#color-error').textContent='';
+ for(const [key,value] of Object.entries({contrast:100,gloss:55,grain:40}))document.querySelector('#'+key).value=value;
+ document.querySelector('#grain-enabled').checked=false;updateMaterial();
+});
+const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+function smooth(a,b,v){let t=Math.max(0,Math.min(1,(v-a)/(b-a)));return t*t*(3-2*t)}
+function engrave(text){
+ mc.clearRect(0,0,N,N);mc.fillStyle='white';mc.textAlign='center';mc.textBaseline='middle';mc.lineJoin='round';
+ const chars=Array.from(text);let lines=chars.length>6?[chars.slice(0,Math.ceil(chars.length/2)).join(''),chars.slice(Math.ceil(chars.length/2)).join('')]:[text];
+ let size=lines.length>1?49:72;mc.font=`600 ${size}px Georgia,"Songti SC",serif`;
+ let width=Math.max(...lines.map(l=>mc.measureText(l).width));if(width>205)size*=205/width;
+ mc.font=`600 ${size}px Georgia,"Songti SC",serif`;mc.filter='blur(0.85px)';
+ lines.forEach((l,i)=>mc.fillText(l,C,C+(i-(lines.length-1)/2)*(size+10)+3));
+ mc.strokeStyle='white';mc.lineWidth=2.2;mc.beginPath();mc.arc(C,C,119,0,Math.PI*2);mc.stroke();
+ // Fine inner ring and four quiet ornamental dots.
+ mc.lineWidth=.9;mc.beginPath();mc.arc(C,C,112,0,Math.PI*2);mc.stroke();
+ for(let i=0;i<4;i++){let a=Math.PI/4+i*Math.PI/2;mc.beginPath();mc.arc(C+103*Math.cos(a),C+103*Math.sin(a),2,0,7);mc.fill()}
+ const data=mc.getImageData(0,0,N,N).data;
+ for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+ const k=y*N+x,dx=x-C,dy=y-C,r=Math.hypot(dx,dy),a=Math.atan2(dy,dx);
+ radii[k]=r;angles[k]=a;waves[k]=.041*Math.sin(5*a+.5)+.026*Math.sin(7*a-1)+.018*Math.cos(3*a+.9);
+ engraving[k]=data[k*4+3]/255;const hash=Math.sin(x*12.9898+y*78.233)*43758.5453;noise[k]=(hash-Math.floor(hash))*2-1;
+ }
+}
+function render(p){
+ const flow=smooth(.06,.94,p),dieHeight=43-34*smooth(0,1,p);
+ for(let k=0;k<total;k++){
+ const r=radii[k],a=angles[k];
+ // The silhouette moves outward continuously, rather than revealing a second shape.
+ const radius=(141+25*flow)*(1+(.023*Math.sin(3*a)+.012*Math.cos(5*a))*(1-flow)+waves[k]*flow);
+ const q=r/radius;
+ if(q>=1){heights[k]=0;continue;}
+ const dome=(7*Math.pow(1-q*q,.35)+31*Math.pow(1-q*q,1.2))*(1-.23*flow);
+ // Rounded shoulder of a rigid die. Its center reaches wax before its edges.
+ const die=dieHeight+47*smooth(122,148,r)-engraving[k]*3.4;
+ const difference=dome-die;
+ const contact=.65;
+ const clipped=Math.min(dome,die)-Math.pow(Math.max(contact-Math.abs(difference),0),2)/(4*contact);
+ // Wax pushed beyond the die collects in a thick, uneven lip.
+ const lip=12*flow*Math.exp(-Math.pow((q-.876)/.067,2));
+ const ripples=.65*flow*Math.sin(a*8+r*.06)*Math.exp(-Math.pow((q-.89)/.09,2));
+ heights[k]=Math.max(0,(clipped+lip+ripples)*(1-smooth(.985,1,q)));
+ }
+ seal.dataset.progress=progress.toFixed(5);
+ seal.dataset.state=state;
+ document.querySelector('#pressure-fill').style.width=(p*100)+'%';
+ const out=rgba.data;
+ const [red,green,blue]=material.rgb,gloss=material.gloss;
+ const grit=material.grainEnabled?material.grain:0;
+ const exponent=8+49*gloss,shine=gloss/.55;
+
+ for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+ const k=y*N+x,j=k*4,h=heights[k];
+ if(h<.08){out[j]=47;out[j+1]=26;out[j+2]=18;let shadowRadius=145+25*flow;let dx=(x-C-7)/shadowRadius,dy=(y-C-12)/shadowRadius;out[j+3]=Math.round(24*Math.exp(-Math.pow((Math.hypot(dx,dy)-.88)*9,2)));continue}
+ // Fixed micro-normal perturbations make grains catch the light without flicker.
+ const nx=(heights[k-1]||h)-(heights[k+1]||h)+grit*(noise[k-1]-noise[k+1])*.9;
+ const ny=(heights[k-N]||h)-(heights[k+N]||h)+grit*(noise[k-N]-noise[k+N])*.9,nz=2.5;
+ const len=Math.hypot(nx,ny,nz),ux=nx/len,uy=ny/len,uz=nz/len;
+ const light=Math.max(0,ux*-.44+uy*-.52+uz*.73);
+ const spec=Math.pow(Math.max(0,ux*-.25+uy*-.31+uz*.917),exponent)*shine*(1-grit*.5);
+ const gleam=Math.pow(Math.max(0,ux*.44+uy*.42+uz*.79),exponent+20)*.26*shine*(1-grit*.5);
+ const shade=Math.max(.06,.78+(.39+light*.65-.78)*material.contrast)*(1+noise[k]*grit*.14);
+ out[j]=red*shade+spec*(55+90*red/255)+gleam*(70+105*red/255);
+ out[j+1]=green*shade+spec*(55+90*green/255)+gleam*(70+105*green/255);
+ out[j+2]=blue*shade+spec*(55+90*blue/255)+gleam*(70+105*blue/255);
+ out[j+3]=Math.min(255,h*190);
+ }
+ ctx.putImageData(rgba,0,0);
+}
+function hint(text){message.textContent=text}
+function sync(){
+ if(composing)return;
+ let chars=Array.from(input.value);if(chars.length>12){input.value=chars.slice(0,12).join('');chars=Array.from(input.value)}
+ document.querySelector('.count').textContent=chars.length+' / 12';
+ cancelAnimationFrame(raf);progress=0;elapsed=0;state=input.value.trim()?'ready':'empty';input.disabled=false;
+ status.classList.toggle('ready',state==='ready');seal.setAttribute('aria-disabled',state==='empty');reset.disabled=true;
+ engrave(input.value.trim());render(0);hint(state==='ready'?'持续悬停，缓缓按压 · 移开即可暂停':'先写下文字，再唤醒这枚火漆');
+}
+function press(){
+ if(state!=='ready'&&state!=='paused')return;
+ state='pressing';seal.dataset.state=state;reset.disabled=false;lastTime=performance.now();
+ hint(progress<.45?'正在按压 · 漆泥缓缓向外舒展':'保持停留 · 印记正在压入蜡面');
+ function frame(now){
+ if(state!=='pressing')return;
+ // Clamp long background gaps; visibility/blur also pause the interaction.
+ const dt=Math.min(80,now-lastTime);lastTime=now;
+ elapsed=Math.min(PRESS_DURATION,elapsed+dt);
+ progress=pressureAt(elapsed);
+ if(progress>=1){state='sealed';seal.setAttribute('aria-disabled','true');hint('印记已成 · 此刻，值得封存');}
+ // Reduced-motion users retain hold timing, with only the completed form redrawn.
+ if(!reduced.matches||progress>=1)render(progress);
+ else{seal.dataset.progress=progress.toFixed(5);seal.dataset.state=state;document.querySelector('#pressure-fill').style.width=(progress*100)+'%';}
+ if(state==='pressing')raf=requestAnimationFrame(frame);
+ }
+ raf=requestAnimationFrame(frame);
+}
+function pause(){
+ if(state!=='pressing')return;
+ cancelAnimationFrame(raf);state='paused';seal.dataset.state=state;
+ hint('已暂停 · 移回漆泥，继续刚才的按压');
+}
+function overWax(e){
+ const box=canvas.getBoundingClientRect();
+ const x=(e.clientX-box.left)/box.width*N-C,y=(e.clientY-box.top)/box.height*N-C;
+ return Math.hypot(x,y)<151+25*smooth(.06,.94,progress);
+}
+input.addEventListener('input',sync);input.addEventListener('compositionstart',()=>composing=true);input.addEventListener('compositionend',()=>{composing=false;sync()});
+seal.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'){if(overWax(e))press();else pause();}});
+seal.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse'&&overWax(e))press();});
+seal.addEventListener('pointerleave',pause);
+seal.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'&&overWax(e)){seal.setPointerCapture(e.pointerId);press();}});
+seal.addEventListener('pointerup',e=>{if(e.pointerType!=='mouse')pause();});
+seal.addEventListener('pointercancel',pause);
+seal.addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();if(!e.repeat)press();}});
+seal.addEventListener('keyup',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();pause();}});
+seal.addEventListener('blur',pause);window.addEventListener('blur',pause);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
+reset.addEventListener('click',()=>{sync();input.focus()});
+sync();
+</script>
+</body></html>
