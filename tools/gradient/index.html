@@ -14,6 +14,23 @@
       <p class="intro">随机生成和谐配色与柔和渐变的纹理画面，调节质感后导出高分辨率 PNG。</p>
     </div>
     <div class="section">
+      <div class="section-title">生成 Generate</div>
+      <div class="row">
+        <label for="preset">画布比例 / 尺寸</label>
+        <select id="preset">
+          <option value="1200x1600" selected>竖版 3:4（1200 × 1600）</option>
+          <option value="1600x1600">方形 1:1（1600 × 1600）</option>
+          <option value="1920x1080">横版 16:9（1920 × 1080）</option>
+          <option value="1080x1920">手机竖屏 9:16（1080 × 1920）</option>
+          <option value="2480x3508">A4 印刷 300dpi（2480 × 3508）</option>
+        </select>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btnRandom">随机生成图案</button>
+      </div>
+      <div class="hint">“随机生成图案”会重新排布图案位置与虚实层次，配色保持不变。</div>
+    </div>
+    <div class="section">
       <div class="section-title">配色 Colors</div>
       <div class="row">
         <label>颜色数量 <span class="val" id="colorCountVal">5</span></label>
@@ -84,19 +101,6 @@
     <div class="section">
       <div class="section-title">输出 Export</div>
       <div class="row">
-        <label for="preset">画布比例 / 尺寸</label>
-        <select id="preset">
-          <option value="1200x1600" selected>竖版 3:4（1200 × 1600）</option>
-          <option value="1600x1600">方形 1:1（1600 × 1600）</option>
-          <option value="1920x1080">横版 16:9（1920 × 1080）</option>
-          <option value="1080x1920">手机竖屏 9:16（1080 × 1920）</option>
-          <option value="2480x3508">A4 印刷 300dpi（2480 × 3508）</option>
-        </select>
-      </div>
-      <div class="btn-row" style="margin-bottom:14px">
-        <button class="btn btn-primary" id="btnRandom">随机生成图案</button>
-      </div>
-      <div class="row">
         <label for="exportScale">导出倍率</label>
         <select id="exportScale">
           <option value="1" selected>1x（按所选尺寸原图导出）</option>
@@ -106,7 +110,6 @@
         </select>
       </div>
       <button class="btn" id="btnDownload">下载 PNG</button>
-      <div class="hint">“随机生成图案”会重新排布图案位置与虚实层次，配色保持不变。</div>
     </div>
   </aside>
   <section class="stage" aria-label="渐变预览">
