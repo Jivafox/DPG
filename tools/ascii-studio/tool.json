@@ -1,6 +1,6 @@
 {
   "id": "ascii-studio",
-  "name": "ASCII Studio",
+  "name": "ASCII I",
   "description": "将图片和视频转换为字符画，支持自定义 SVG 字符与图片、矢量及无声视频导出。",
   "tags": [
     "字符画",
@@ -8,10 +8,10 @@
     "视频"
   ],
   "entry": "index.html",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "cover": "assets/cover.png",
   "created": "2026-09-28",
-  "updated": "2026-09-28",
+  "updated": "2026-09-29",
   "status": "published",
   "capabilities": [
     "download"
