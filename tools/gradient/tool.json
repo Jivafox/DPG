@@ -1,0 +1,13 @@
+{
+  "id": "gradient",
+  "name": "Gradient",
+  "description": "随机生成和谐配色的渐变纹理，调节团块、羽化、景深与颗粒质感，导出高分辨率 PNG。",
+  "tags": ["渐变", "纹理", "生成"],
+  "entry": "index.html",
+  "version": "1.0.0",
+  "created": "2026-09-29",
+  "updated": "2026-09-29",
+  "status": "published",
+  "cover": "assets/cover.png",
+  "capabilities": ["download"]
+}
