@@ -15,6 +15,23 @@
     </div>
     <div class="section">
       <div class="section-title">生成 Generate</div>
+      <div class="row">
+        <label for="aspSel">画幅比例</label>
+        <select id="aspSel">
+          <option value="1:1" selected>1:1</option>
+          <option value="4:3">4:3</option>
+          <option value="3:4">3:4</option>
+          <option value="16:9">16:9</option>
+          <option value="9:16">9:16</option>
+        </select>
+      </div>
+      <div class="row" style="margin-bottom:14px">
+        <label for="seedInput">种子</label>
+        <div class="seed-row">
+          <input type="number" id="seedInput" aria-label="随机种子">
+          <button class="btn seed-btn" id="btnDice" title="随机种子" aria-label="随机种子">⟳</button>
+        </div>
+      </div>
       <div class="big-actions">
         <button class="btn btn-primary" id="btnRandom">随机生成</button>
         <button class="btn" id="btnReseed">换个种子（保持参数）</button>
@@ -41,23 +58,6 @@
       <div class="mode-tabs" id="modeTabs"></div>
     </div>
     <div id="dynPanel"></div>
-    <div class="section">
-      <div class="section-title">种子 / 画幅</div>
-      <div class="seed-row">
-        <input type="number" id="seedInput" aria-label="随机种子">
-        <button class="btn seed-btn" id="btnDice" title="随机种子" aria-label="随机种子">⟳</button>
-      </div>
-      <div class="row" style="margin-top:12px">
-        <label for="aspSel">画幅比例</label>
-        <select id="aspSel">
-          <option value="1:1" selected>1:1</option>
-          <option value="4:3">4:3</option>
-          <option value="3:4">3:4</option>
-          <option value="16:9">16:9</option>
-          <option value="9:16">9:16</option>
-        </select>
-      </div>
-    </div>
   </aside>
   <section class="stage" aria-label="图形预览">
     <div class="stage-toolbar"><span>预览</span><span id="canvasMeta">1600 × 1600</span></div>
