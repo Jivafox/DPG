@@ -17,6 +17,17 @@ h1{font-size:28px;letter-spacing:-.6px;margin:6px 0 10px;font-weight:600}
 
 .workbench{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:28px;align-items:start}
 
+/* 桌面端：预览区固定，仅参数面板滚动 */
+@media(min-width:861px){
+  html,body{height:100%}
+  body{display:flex;flex-direction:column;overflow:hidden}
+  main{flex:1;min-height:0;width:100%;display:flex;flex-direction:column}
+  .workbench{flex:1;min-height:0;align-items:stretch}
+  .stage-panel{display:flex;flex-direction:column;min-height:0}
+  .stage{flex:1;min-height:0}
+  aside{min-height:0;overflow-y:auto;overscroll-behavior:contain}
+}
+
 /* 预览区 */
 .stage-panel{min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px}
 .stage{display:grid;place-items:center;min-height:min(58vh,620px)}
